@@ -1168,9 +1168,91 @@ body {
 /* Responsive */
 @media (max-width: 900px) {
   .admin-topbar { padding: 0 16px; }
-  .admin-nav-strip { padding: 0 16px; }
-  .admin-main { padding: 20px 16px 40px; }
+  .admin-nav-strip {
+    padding: 0 12px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .admin-nav-strip::-webkit-scrollbar {
+    display: none;
+  }
+  .nav-tab-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 12px 14px;
+    font-size: 0.84rem;
+  }
+  .admin-main { padding: 20px 14px 40px; }
   .kpi-grid { grid-template-columns: 1fr; }
   .form-grid-2 { grid-template-columns: 1fr; }
   .topbar-center { display: none; }
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .page-header-actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .page-header-actions .btn-primary-admin,
+  .page-header-actions .btn-secondary-admin {
+    flex: 1;
+    min-width: 140px;
+    justify-content: center;
+  }
+  .table-card-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .table-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .search-box-wrap {
+    min-width: 100%;
+  }
+  .filter-select {
+    width: 100%;
+  }
+  .modal-box {
+    max-width: 95vw;
+    margin: 12px auto;
+  }
+  .auth-card {
+    width: 92vw;
+    max-width: 400px;
+    padding: 28px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-topbar {
+    padding: 0 12px;
+  }
+  .topbar-logo {
+    height: 32px;
+  }
+  .topbar-brand h1 {
+    font-size: 0.95rem;
+  }
+  .btn-view-site {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+  .admin-user-profile {
+    gap: 8px;
+  }
+  .user-meta {
+    display: none;
+  }
+  .page-title-group h2 {
+    font-size: 1.35rem;
+  }
 }

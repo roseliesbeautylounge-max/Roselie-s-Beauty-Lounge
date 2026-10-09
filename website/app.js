@@ -1425,14 +1425,24 @@ function initNavigation() {
 
   toggle?.addEventListener('click', () => {
     nav?.classList.toggle('active');
+    toggle?.classList.toggle('active');
   });
 
   document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', () => {
       nav?.classList.remove('active');
+      toggle?.classList.remove('active');
       document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
       link.classList.add('active');
     });
+  });
+
+  // Close mobile drawer when tapping outside
+  document.addEventListener('click', (e) => {
+    if (nav?.classList.contains('active') && !nav.contains(e.target) && !toggle?.contains(e.target)) {
+      nav.classList.remove('active');
+      toggle?.classList.remove('active');
+    }
   });
 
   // Contact form submission
