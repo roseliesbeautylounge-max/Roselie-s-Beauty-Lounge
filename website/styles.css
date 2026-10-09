@@ -2703,25 +2703,23 @@ button, input, select, textarea {
   }
 
   .category-tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 6px;
-    margin: 0 -16px;
-    padding-left: 16px;
-    padding-right: 16px;
-    scrollbar-width: none;
-  }
-
-  .category-tabs::-webkit-scrollbar {
-    display: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start;
+    margin: 0 0 6px 0;
+    padding: 0;
+    width: 100%;
+    overflow: visible;
   }
 
   .cat-pill {
+    flex: 0 0 auto;
     white-space: nowrap;
-    flex-shrink: 0;
-    padding: 9px 18px;
-    font-size: 0.85rem;
+    padding: 8px 14px;
+    font-size: 0.82rem;
+    border-radius: 20px;
+    line-height: 1.2;
   }
 
   .services-grid {
@@ -2980,9 +2978,13 @@ button, input, select, textarea {
     font-size: 1.7rem;
   }
 
+  .category-tabs {
+    gap: 6px;
+  }
+
   .cat-pill {
-    padding: 7px 14px;
-    font-size: 0.8rem;
+    padding: 6px 12px;
+    font-size: 0.78rem;
   }
 
   .time-slots-grid {
