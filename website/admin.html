@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal — Roselie's Beauty Lounge</title>
+  <link rel="icon" type="image/png" href="assets/logo.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       1. AUTHENTICATION / LOGIN OVERLAY
+       ======================================================================== -->
+  <div class="auth-overlay" id="adminAuthOverlay">
+    <div class="auth-card">
+      <img src="assets/logo.png" alt="Roselie's Beauty Lounge Logo" class="auth-logo">
+      <h2 class="auth-title">Staff Admin Console</h2>
+      <p class="auth-subtitle">Roselie's Beauty Lounge Management</p>
+
+      <form id="adminLoginForm" class="auth-form">
+        <div class="form-group">
+          <label for="adminUsername">Admin Username</label>
+          <div class="auth-input-wrap">
+            <i class="fa-solid fa-user-shield"></i>
+            <input type="text" id="adminUsername" class="auth-input" value="admin" required placeholder="admin">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="adminPassword">Security Password / PIN</label>
+          <div class="auth-input-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="adminPassword" class="auth-input" value="admin123" required placeholder="admin123 or 1234">
+          </div>
+        </div>
+
+        <button type="submit" class="auth-btn">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In to Portal
+        </button>
+      </form>
+
+      <div class="demo-creds-box">
+        <div>Default Credentials: <code>admin</code> / <code>admin123</code> (or PIN <code>1234</code>)</div>
+        <button type="button" class="auth-quick-fill" id="btnQuickDemoLogin">
+          <i class="fa-solid fa-bolt"></i> 1-Click Quick Sign In
+        </button>
+      </div>
+
+      <a href="index.html" class="auth-back-link">
+        <i class="fa-solid fa-arrow-left"></i> Return to Public Website
+      </a>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       2. MAIN ADMIN PORTAL APP
+       ======================================================================== -->
+  <div class="admin-app" id="adminApp">
+    
+    <!-- Top Administrative Navigation Bar -->
+    <header class="admin-topbar">
+      <a href="admin.html" class="topbar-brand">
+        <img src="assets/logo.png" alt="Emblem" class="topbar-logo">
+        <div class="topbar-brand-text">
+          <h1>Roselie's Beauty Lounge</h1>
+          <span>Staff &amp; Executive Admin</span>
+        </div>
+      </a>
+
+      <div class="topbar-center">
+        <div class="live-sync-pill">
+          <span class="pulse-dot"></span>
+          <span>Live Website Sync Active</span>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <a href="index.html" target="_blank" class="btn-view-site">
+          <i class="fa-solid fa-globe"></i> View Website <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.75rem;"></i>
+        </a>
+
+        <div class="admin-user-profile">
+          <div class="user-avatar">AD</div>
+          <div class="user-meta">
+            <span class="user-name">Administrator</span>
+            <span class="user-role">Lounge Manager</span>
+          </div>
+          <button class="btn-logout" id="btnLogoutAdmin" title="Sign Out">
+            <i class="fa-solid fa-power-off"></i> Exit
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Administrative Tab Navigation Strip -->
+    <nav class="admin-nav-strip">
+      <button class="nav-tab-btn active" data-tab="overview">
+        <i class="fa-solid fa-chart-pie"></i> Overview
+      </button>
+      <button class="nav-tab-btn" data-tab="appointments">
+        <i class="fa-regular fa-calendar-check"></i> Appointments
+        <span class="tab-badge amber" id="badgePendingAppointments">0</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="orders">
+        <i class="fa-solid fa-bag-shopping"></i> Boutique Orders
+        <span class="tab-badge blue" id="badgeNewOrders">0</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="services">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Services &amp; Pricing
+      </button>
+      <button class="nav-tab-btn" data-tab="messages">
+        <i class="fa-regular fa-comments"></i> Inquiries
+        <span class="tab-badge" id="badgeNewMessages">0</span>
+      </button>
+      <button class="nav-tab-btn" data-tab="cms">
+        <i class="fa-solid fa-paintbrush"></i> Website CMS Editor
+      </button>
+      <button class="nav-tab-btn" data-tab="settings">
+        <i class="fa-solid fa-sliders"></i> System &amp; Backup
+      </button>
+    </nav>
+
+    <!-- Admin Main Body Container -->
+    <main class="admin-main">
+      
+      <!-- ====================================================================
+           TAB 1: OVERVIEW DASHBOARD
+           ==================================================================== -->
+      <section class="tab-pane active" id="pane-overview">
+        <div class="page-header">
+          <div class="page-title-group">
+            <h2>Welcome back, Administrator</h2>
+            <p>Live summary of client reservations, retail boutique orders, and clinic activity.</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn-primary-admin" id="btnOpenNewBookingModal">
+              <i class="fa-solid fa-plus"></i> New Reservation
+            </button>
+            <button class="btn-secondary-admin" onclick="exportDataToCsv('appointments')">
+              <i class="fa-solid fa-file-csv"></i> Export Appointments
+            </button>
+          </div>
+        </div>
+
+        <!-- 4 Key Metric Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon-wrap rose">
+              <i class="fa-regular fa-calendar-check"></i>
+            </div>
+            <div class="kpi-content">
+              <div class="kpi-label">Total Reservations</div>
+              <div class="kpi-val" id="kpiTotalBookings">0</div>
+              <div class="kpi-sub green"><i class="fa-solid fa-arrow-trend-up"></i> Active Online Engine</div>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon-wrap amber">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+            <div class="kpi-content">
+              <div class="kpi-label">Pending Approval</div>
+              <div class="kpi-val" id="kpiPendingBookings">0</div>
+              <div class="kpi-sub amber"><i class="fa-solid fa-circle-exclamation"></i> Action Required</div>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon-wrap green">
+              <i class="fa-solid fa-peso-sign"></i>
+            </div>
+            <div class="kpi-content">
+              <div class="kpi-label">Boutique Sales</div>
+              <div class="kpi-val" id="kpiBoutiqueSales">₱0.00</div>
+              <div class="kpi-sub green"><i class="fa-solid fa-bag-shopping"></i> Online Retail Orders</div>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-icon-wrap gold">
+              <i class="fa-solid fa-envelope-open-text"></i>
+            </div>
+            <div class="kpi-content">
+              <div class="kpi-label">Client Inquiries</div>
+              <div class="kpi-val" id="kpiTotalMessages">0</div>
+              <div class="kpi-sub"><i class="fa-regular fa-user"></i> Website Leads</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Appointments Overview -->
+        <div class="table-card">
+          <div class="table-card-header">
+            <div class="table-card-title">
+              <i class="fa-regular fa-calendar-days text-rose"></i>
+              <span>Recent Online Appointments</span>
+            </div>
+            <button class="btn-secondary-admin" onclick="switchTab('appointments')">
+              View All Appointments <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="overviewBookingsTable">
+              <thead>
+                <tr>
+                  <th>Voucher Code</th>
+                  <th>Client</th>
+                  <th>Contact</th>
+                  <th>Treatment</th>
+                  <th>Schedule</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Quick Action</th>
+                </tr>
+              </thead>
+              <tbody id="overviewBookingsBody">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent Boutique Orders Overview -->
+        <div class="table-card">
+          <div class="table-card-header">
+            <div class="table-card-title">
+              <i class="fa-solid fa-bag-shopping text-rose"></i>
+              <span>Recent Boutique Retail Orders</span>
+            </div>
+            <button class="btn-secondary-admin" onclick="switchTab('orders')">
+              View All Orders <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="overviewOrdersTable">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Items Summary</th>
+                  <th>Total</th>
+                  <th>Payment</th>
+                  <th>Status</th>
+                  <th>Quick Action</th>
+                </tr>
+              </thead>
+              <tbody id="overviewOrdersBody">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 2: APPOINTMENTS & RESERVATIONS MANAGER
+           ==================================================================== -->
+      <section class="tab-pane" id="pane-appointments">
+        <div class="page-header">
+          <div class="page-title-group">
+            <h2>Appointments &amp; Reservations</h2>
+            <p>Manage and approve online client bookings or schedule in-person walk-ins.</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn-primary-admin" id="btnAddNewAppointment2">
+              <i class="fa-solid fa-plus"></i> Add Reservation
+            </button>
+            <button class="btn-secondary-admin" onclick="exportDataToCsv('appointments')">
+              <i class="fa-solid fa-file-csv"></i> Export to CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <div class="table-toolbar">
+              <div class="search-box-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="appointmentSearch" class="search-input-admin" placeholder="Search by name, voucher, phone...">
+              </div>
+
+              <select id="appointmentStatusFilter" class="filter-select">
+                <option value="all">All Statuses</option>
+                <option value="Pending">Pending Approval</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div>
+              <span id="appointmentCountDisplay" style="font-size:0.85rem; color:var(--muted-gray); font-weight:600;">0 bookings</span>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Voucher Code</th>
+                  <th>Client Name</th>
+                  <th>Phone</th>
+                  <th>Treatment Service</th>
+                  <th>Date &amp; Time</th>
+                  <th>Specialist</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="appointmentsTableBody">
+                <!-- Generated via admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 3: BOUTIQUE ORDERS MANAGER
+           ==================================================================== -->
+      <section class="tab-pane" id="pane-orders">
+        <div class="page-header">
+          <div class="page-title-group">
+            <h2>Skincare Boutique Orders</h2>
+            <p>Retail sales placed through the website's shopping cart and checkout drawer.</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn-secondary-admin" onclick="exportDataToCsv('orders')">
+              <i class="fa-solid fa-file-csv"></i> Export Orders (CSV)
+            </button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <div class="table-toolbar">
+              <div class="search-box-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="orderSearch" class="search-input-admin" placeholder="Search order ID, customer, phone...">
+              </div>
+
+              <select id="orderStatusFilter" class="filter-select">
+                <option value="all">All Order Statuses</option>
+                <option value="Pending">Pending</option>
+                <option value="Processing">Processing</option>
+                <option value="Ready for Pickup">Ready for Pickup / Shipped</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+            <div>
+              <span id="orderCountDisplay" style="font-size:0.85rem; color:var(--muted-gray); font-weight:600;">0 orders</span>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Date</th>
+                  <th>Customer</th>
+                  <th>Contact</th>
+                  <th>Delivery / Pickup</th>
+                  <th>Items Purchased</th>
+                  <th>Total</th>
+                  <th>Payment</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <!-- Generated via admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 4: SERVICES CATALOG & PRICING MANAGER
+           ==================================================================== -->
+      <section class="tab-pane" id="pane-services">
+        <div class="page-header">
+          <div class="page-title-group">
+            <h2>Treatment Catalog &amp; Pricing</h2>
+            <p>Modify treatment descriptions, update pricing (PHP), or add new services. Changes immediately sync to the public website!</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn-primary-admin" id="btnAddNewService">
+              <i class="fa-solid fa-plus"></i> Add New Treatment
+            </button>
+            <button class="btn-secondary-admin" id="btnResetCatalog">
+              <i class="fa-solid fa-rotate-left"></i> Reset to Default
+            </button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <div class="table-toolbar">
+              <div class="search-box-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="serviceSearch" class="search-input-admin" placeholder="Search treatment name...">
+              </div>
+
+              <select id="serviceCategoryFilter" class="filter-select">
+                <option value="all">All Categories</option>
+                <option value="gluta">Gluta Drips &amp; Push</option>
+                <option value="facial">Facial &amp; Skin Care</option>
+                <option value="laser">Laser Clinic</option>
+                <option value="hair">Hair Studio</option>
+                <option value="nails">Nail Spa &amp; Foot Care</option>
+              </select>
+            </div>
+            <div>
+              <span id="serviceCountDisplay" style="font-size:0.85rem; color:var(--muted-gray); font-weight:600;">0 treatments</span>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Treatment Name</th>
+                  <th>Category</th>
+                  <th>Base Price</th>
+                  <th>Duration</th>
+                  <th>5+1 Package</th>
+                  <th>Description</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="servicesTableBody">
+                <!-- Generated via admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 5: CLIENT INQUIRIES & MESSAGES
+           ==================================================================== -->
+      <section class="tab-pane" id="pane-messages">
+        <div class="page-header">
+          <div class="page-title-group">
+            <h2>Client Inquiries &amp; Consultation Leads</h2>
+            <p>Messages received from the website contact and consultation form.</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn-secondary-admin" onclick="exportDataToCsv('messages')">
+              <i class="fa-solid fa-file-csv"></i> Export Messages
+            </button>
+          </div>
+        </div>
+
+        <div class="table-card">
+          <div class="table-card-header">
+            <div class="table-toolbar">
+              <div class="search-box-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="messageSearch" class="search-input-admin" placeholder="Search inquiries...">
+              </div>
+            </div>
+            <div>
+              <span id="messageCountDisplay" style="font-size:0.85rem; color:var(--muted-gray); font-weight:600;">0 messages</span>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Client Name</th>
+                  <th>Mobile Number</th>
+                  <th>Subject</th>
+                  <th>Message Excerpt</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="messagesTableBody">
+                <!-- Generated via admin.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB 6: SETTINGS, BACKUP & POS BRIDGE
+           ==================================================================== -->
+      <section class="tab-pane" id="pane-settings">
+        <div class="page-header">
+          <div class="page-title-group">
+            <h2>System Administration &amp; Data Backup</h2>
+            <p>Export database records, configure public announcements, or reset demo data.</p>
+          </div>
+        </div>
+
+        <div class="settings-grid">
+          <!-- Announcement & Contact Settings -->
+          <div class="settings-card">
+            <h3><i class="fa-solid fa-bullhorn text-rose"></i> Public Announcement Banner</h3>
+            <p>Modify the announcement message displayed at the very top of the official website.</p>
+            <form id="announcementForm">
+              <div class="admin-form-group">
+                <label for="announcementInput">Announcement Message</label>
+                <textarea id="announcementInput" class="admin-form-textarea" rows="3">PROMO: Book any 5 sessions &amp; get your 6th session FREE on all signature laser &amp; gluta treatments!</textarea>
+              </div>
+              <div class="admin-form-group">
+                <label for="phoneInput">Contact Phone (Display &amp; WhatsApp)</label>
+                <input type="text" id="phoneInput" class="admin-form-input" value="+63 917 123 4567">
+              </div>
+              <button type="submit" class="btn-primary-admin">
+                <i class="fa-solid fa-floppy-disk"></i> Save Website Banner
+              </button>
+            </form>
+          </div>
+
+          <!-- Data Backup & CSV Export -->
+          <div class="settings-card">
+            <h3><i class="fa-solid fa-file-export text-rose"></i> Export Records &amp; POS Bridge</h3>
+            <p>Download clean CSV spreadsheets compatible with Microsoft Excel, Google Sheets, or your POS accounting.</p>
+            <div class="export-btn-group">
+              <button class="btn-export" onclick="exportDataToCsv('appointments')">
+                <span><i class="fa-solid fa-calendar-check text-rose"></i> Export Appointments (CSV)</span>
+                <i class="fa-solid fa-download"></i>
+              </button>
+              <button class="btn-export" onclick="exportDataToCsv('orders')">
+                <span><i class="fa-solid fa-bag-shopping text-rose"></i> Export Boutique Orders (CSV)</span>
+                <i class="fa-solid fa-download"></i>
+              </button>
+              <button class="btn-export" onclick="exportFullJsonBackup()">
+                <span><i class="fa-solid fa-database text-rose"></i> Full System Backup (.JSON)</span>
+                <i class="fa-solid fa-download"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Demo & Database Utilities -->
+          <div class="settings-card">
+            <h3><i class="fa-solid fa-database text-rose"></i> Database Maintenance</h3>
+            <p>Quick utilities to test or restore sample appointment bookings and retail orders.</p>
+            <div class="export-btn-group">
+              <button class="btn-export" id="btnLoadDemoData">
+                <span><i class="fa-solid fa-wand-magic-sparkles text-rose"></i> Load Realistic Demo Records</span>
+                <i class="fa-solid fa-circle-arrow-down"></i>
+              </button>
+              <button class="btn-export" id="btnClearAllData" style="color:#C84D58;">
+                <span><i class="fa-solid fa-trash-can" style="color:#C84D58;"></i> Clear Local Database</span>
+                <i class="fa-solid fa-triangle-exclamation"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           TAB: WEBSITE CONTENT & CMS EDITOR
+           ==================================================================== -->
+      <section class="tab-pane" id="pane-cms">
+        <div class="page-header">
+          <div class="page-title-group">
+            <h2>Website Content Management System (CMS)</h2>
+            <p>Edit every headline, story, client testimonial, FAQ, retail product, and contact detail across the entire website live!</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn-primary-admin" id="btnSaveCmsAll">
+              <i class="fa-solid fa-floppy-disk"></i> Save All Content
+            </button>
+            <button class="btn-secondary-admin" id="btnResetCmsDefaults">
+              <i class="fa-solid fa-rotate-left"></i> Restore Defaults
+            </button>
+          </div>
+        </div>
+
+        <div class="settings-grid">
+          <!-- 1. Hero & Branding -->
+          <div class="settings-card" style="grid-column: 1 / -1;">
+            <h3><i class="fa-solid fa-wand-magic-sparkles text-rose"></i> 1. Hero Section &amp; Tagline Content</h3>
+            <p>Customize the primary headline, tagline, rating badge, and feature highlights on the home screen.</p>
+            <form id="cmsHeroForm">
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsHeroTag">Hero Tagline Badge</label>
+                  <input type="text" id="cmsHeroTag" class="admin-form-input" value="✦ Luxury Aesthetics &amp; Beauty Lounge ✦">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsHeroTitle">Main Hero Title</label>
+                  <input type="text" id="cmsHeroTitle" class="admin-form-input" value="Where Elegance Meets &lt;br&gt;&lt;span class=&quot;text-gradient-gold&quot;&gt;Aesthetic Perfection&lt;/span&gt;">
+                </div>
+              </div>
+
+              <div class="admin-form-group">
+                <label for="cmsHeroDesc">Introductory Description</label>
+                <textarea id="cmsHeroDesc" class="admin-form-textarea" rows="2">Step into a sanctuary of transformative wellness. Experience medical-grade gluta drips, pain-free diode lasers, advanced hydro-facials, and couture salon treatments tailored to unveil your luminous best.</textarea>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsHeroRatingVal">Top Rating Badge Title</label>
+                  <input type="text" id="cmsHeroRatingVal" class="admin-form-input" value="5.0 / 5.0 Rating">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsHeroRatingSub">Top Rating Badge Subtitle</label>
+                  <input type="text" id="cmsHeroRatingSub" class="admin-form-input" value="Over 1,200+ Radiant Clients">
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsHeroPromoBadgeTitle">Floating Promo Badge Title</label>
+                  <input type="text" id="cmsHeroPromoBadgeTitle" class="admin-form-input" value="Signature 5+1 Sessions">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsHeroPromoBadgeSub">Floating Promo Badge Subtitle</label>
+                  <input type="text" id="cmsHeroPromoBadgeSub" class="admin-form-input" value="Buy 5 Get 1 Complimentary">
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsFeat1Title">Trust Badge 1 Title</label>
+                  <input type="text" id="cmsFeat1Title" class="admin-form-input" value="Certified Specialists">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsFeat1Sub">Trust Badge 1 Subtitle</label>
+                  <input type="text" id="cmsFeat1Sub" class="admin-form-input" value="Board-trained aestheticians">
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsFeat2Title">Trust Badge 2 Title</label>
+                  <input type="text" id="cmsFeat2Title" class="admin-form-input" value="Medical Grade Tech">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsFeat2Sub">Trust Badge 2 Subtitle</label>
+                  <input type="text" id="cmsFeat2Sub" class="admin-form-input" value="Diode Ice &amp; Pico Lasers">
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsFeat3Title">Trust Badge 3 Title</label>
+                  <input type="text" id="cmsFeat3Title" class="admin-form-input" value="100% Authentic Drips">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsFeat3Sub">Trust Badge 3 Subtitle</label>
+                  <input type="text" id="cmsFeat3Sub" class="admin-form-input" value="Japan &amp; Korea Formulated">
+                </div>
+              </div>
+
+              <button type="submit" class="btn-primary-admin">
+                <i class="fa-solid fa-floppy-disk"></i> Save Hero &amp; Badges Content
+              </button>
+            </form>
+          </div>
+
+          <!-- 2. About & Sanctuary Experience -->
+          <div class="settings-card" style="grid-column: 1 / -1;">
+            <h3><i class="fa-solid fa-spa text-rose"></i> 2. About Lounge &amp; Standards Story</h3>
+            <p>Manage your salon's brand story, years in business, and 3 clinical pillars of excellence.</p>
+            <form id="cmsAboutForm">
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsAboutSubtitle">Section Subtitle</label>
+                  <input type="text" id="cmsAboutSubtitle" class="admin-form-input" value="The Sanctuary Experience">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsAboutTitle">Section Main Heading</label>
+                  <input type="text" id="cmsAboutTitle" class="admin-form-input" value="Luxury Aesthetics Rooted in Care &amp; Science">
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsAboutYears">Years Number / Badge</label>
+                  <input type="text" id="cmsAboutYears" class="admin-form-input" value="5+">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsAboutYearsText">Years Badge Subtitle</label>
+                  <input type="text" id="cmsAboutYearsText" class="admin-form-input" value="Years of Aesthetic Excellence">
+                </div>
+              </div>
+
+              <div class="admin-form-group">
+                <label for="cmsAboutPara1">Story Paragraph 1</label>
+                <textarea id="cmsAboutPara1" class="admin-form-textarea" rows="2">Founded with a passion for transformative beauty, Roselie's Beauty Lounge provides an elevated salon and clinical aesthetics escape where relaxation and visible results coexist seamlessly.</textarea>
+              </div>
+
+              <div class="admin-form-group">
+                <label for="cmsAboutPara2">Story Paragraph 2</label>
+                <textarea id="cmsAboutPara2" class="admin-form-textarea" rows="2">From the moment you step through our doors, our dedicated team of licensed aestheticians and master stylists caters to your every comfort in private, meticulously sterilized suites designed for deep rejuvenation.</textarea>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsPillar1Title">Pillar 1 Title</label>
+                  <input type="text" id="cmsPillar1Title" class="admin-form-input" value="Hospital-Grade Hygiene">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsPillar1Desc">Pillar 1 Description</label>
+                  <input type="text" id="cmsPillar1Desc" class="admin-form-input" value="Autoclaved instruments and single-use consumables for every client.">
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsPillar2Title">Pillar 2 Title</label>
+                  <input type="text" id="cmsPillar2Title" class="admin-form-input" value="Authentic Formulations">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsPillar2Desc">Pillar 2 Description</label>
+                  <input type="text" id="cmsPillar2Desc" class="admin-form-input" value="Directly imported Korean hydro-solutions and Japanese medical gluta drips.">
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsPillar3Title">Pillar 3 Title</label>
+                  <input type="text" id="cmsPillar3Title" class="admin-form-input" value="Empathetic Consultation">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsPillar3Desc">Pillar 3 Description</label>
+                  <input type="text" id="cmsPillar3Desc" class="admin-form-input" value="No rushed appointments. Every treatment is customized to your unique goals.">
+                </div>
+              </div>
+
+              <button type="submit" class="btn-primary-admin">
+                <i class="fa-solid fa-floppy-disk"></i> Save About Story &amp; Pillars
+              </button>
+            </form>
+          </div>
+
+          <!-- 3. Client Reviews & Testimonials Manager -->
+          <div class="settings-card" style="grid-column: 1 / -1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+              <div>
+                <h3><i class="fa-solid fa-star text-rose"></i> 3. Client Testimonials &amp; Reviews</h3>
+                <p style="margin-bottom:0;">Add, edit, or remove client reviews and star ratings shown on the public site.</p>
+              </div>
+              <button class="btn-primary-admin" id="btnAddCmsReview">
+                <i class="fa-solid fa-plus"></i> Add New Review
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Reviewer Name</th>
+                    <th>Treatment / Tag</th>
+                    <th>Stars</th>
+                    <th>Quote / Experience</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="cmsReviewsTableBody">
+                  <!-- Populated via admin.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 4. Frequently Asked Questions (FAQ) Manager -->
+          <div class="settings-card" style="grid-column: 1 / -1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+              <div>
+                <h3><i class="fa-solid fa-circle-question text-rose"></i> 4. Frequently Asked Questions (FAQ)</h3>
+                <p style="margin-bottom:0;">Customize the questions and answers in the interactive accordion.</p>
+              </div>
+              <button class="btn-primary-admin" id="btnAddCmsFaq">
+                <i class="fa-solid fa-plus"></i> Add New FAQ
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Question</th>
+                    <th>Answer</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="cmsFaqsTableBody">
+                  <!-- Populated via admin.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 5. Retail Skincare Boutique Products Manager -->
+          <div class="settings-card" style="grid-column: 1 / -1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+              <div>
+                <h3><i class="fa-solid fa-pump-soap text-rose"></i> 5. Skincare Boutique Retail Products</h3>
+                <p style="margin-bottom:0;">Add, edit prices, descriptions, and badges for retail products sold online.</p>
+              </div>
+              <button class="btn-primary-admin" id="btnAddCmsProduct">
+                <i class="fa-solid fa-plus"></i> Add Retail Product
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Product Name</th>
+                    <th>Badge / Tag</th>
+                    <th>Price (PHP)</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="cmsProductsTableBody">
+                  <!-- Populated via admin.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 6. Location, Hours, Contact & Social Links -->
+          <div class="settings-card" style="grid-column: 1 / -1;">
+            <h3><i class="fa-solid fa-location-dot text-rose"></i> 6. Location, Contact Details &amp; Social Links</h3>
+            <p>Update lounge address, contact numbers, hours, email, and social media URLs across header and footer.</p>
+            <form id="cmsContactForm">
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsContactAddress">Lounge Physical Address</label>
+                  <input type="text" id="cmsContactAddress" class="admin-form-input" value="Roselie's Beauty Lounge, Ground Floor, Commercial Center, Metro Manila, Philippines">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsContactPhone">Mobile Number (PH)</label>
+                  <input type="text" id="cmsContactPhone" class="admin-form-input" value="+63 917 123 4567">
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsContactLandline">Telephone / Landline</label>
+                  <input type="text" id="cmsContactLandline" class="admin-form-input" value="(02) 8123 4567">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsContactEmail">Concierge Email</label>
+                  <input type="email" id="cmsContactEmail" class="admin-form-input" value="concierge@roseliesbeautylounge.com">
+                </div>
+              </div>
+
+              <div class="admin-form-group">
+                <label for="cmsContactHours">Operating Hours</label>
+                <textarea id="cmsContactHours" class="admin-form-textarea" rows="2">Monday to Sunday: 10:00 AM – 8:00 PM (Open on all regular holidays)</textarea>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsSocialFb">Facebook Page URL</label>
+                  <input type="text" id="cmsSocialFb" class="admin-form-input" value="https://facebook.com">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsSocialIg">Instagram Profile URL</label>
+                  <input type="text" id="cmsSocialIg" class="admin-form-input" value="https://instagram.com">
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="admin-form-group">
+                  <label for="cmsSocialTiktok">TikTok Profile URL</label>
+                  <input type="text" id="cmsSocialTiktok" class="admin-form-input" value="https://tiktok.com">
+                </div>
+                <div class="admin-form-group">
+                  <label for="cmsSocialWa">WhatsApp Link</label>
+                  <input type="text" id="cmsSocialWa" class="admin-form-input" value="https://wa.me/639171234567">
+                </div>
+              </div>
+
+              <button type="submit" class="btn-primary-admin">
+                <i class="fa-solid fa-floppy-disk"></i> Save Contact &amp; Social Links
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========================================================================
+       3. MODAL DIALOGS
+       ======================================================================== -->
+
+  <!-- Modal: Appointment Details -->
+  <div class="modal-backdrop" id="modalAppointmentDetail">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="madTitle">Appointment Details</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalAppointmentDetail')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-voucher-box">
+          <div class="detail-row">
+            <span>Reference Code:</span>
+            <strong id="madCode">RBL-8921</strong>
+          </div>
+          <div class="detail-row">
+            <span>Client Name:</span>
+            <strong id="madName">Maria Santos</strong>
+          </div>
+          <div class="detail-row">
+            <span>Contact Phone:</span>
+            <strong id="madPhone">0917 123 4567</strong>
+          </div>
+          <div class="detail-row">
+            <span>Email:</span>
+            <strong id="madEmail">-</strong>
+          </div>
+          <div class="detail-row">
+            <span>Service:</span>
+            <strong id="madService">Hydra Facial</strong>
+          </div>
+          <div class="detail-row">
+            <span>Schedule:</span>
+            <strong id="madSchedule">Oct 12, 2026 at 2:00 PM</strong>
+          </div>
+          <div class="detail-row">
+            <span>Assigned Specialist:</span>
+            <strong id="madSpecialist">Lead Aesthetician</strong>
+          </div>
+          <div class="detail-row">
+            <span>Price:</span>
+            <strong id="madPrice" class="text-rose">₱599.00</strong>
+          </div>
+          <div class="detail-row">
+            <span>Status:</span>
+            <span id="madStatusBadge" class="badge badge-confirmed">Confirmed</span>
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label>Client Special Notes / Medical Requests:</label>
+          <div id="madNotes" style="background:#FAF8F8; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--light-border); font-size:0.88rem; min-height:48px;">
+            None provided
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label for="madStatusSelect">Update Reservation Status:</label>
+          <select id="madStatusSelect" class="admin-form-select">
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a id="madWhatsAppBtn" href="#" target="_blank" class="btn-secondary-admin">
+          <i class="fa-brands fa-whatsapp text-rose"></i> Chat via WhatsApp
+        </a>
+        <button class="btn-primary-admin" id="madSaveStatusBtn">
+          <i class="fa-solid fa-check"></i> Save Status
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: New Reservation (Walk-in or Manual) -->
+  <div class="modal-backdrop" id="modalNewAppointment">
+    <div class="modal-box wide">
+      <div class="modal-header">
+        <h3>Create Reservation (Walk-In / Phone)</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalNewAppointment')">&times;</button>
+      </div>
+      <form id="newAppointmentForm">
+        <div class="modal-body">
+          <div class="form-grid-2">
+            <div class="admin-form-group">
+              <label for="naFirstName">First Name *</label>
+              <input type="text" id="naFirstName" class="admin-form-input" required placeholder="e.g. Maria">
+            </div>
+            <div class="admin-form-group">
+              <label for="naLastName">Last Name *</label>
+              <input type="text" id="naLastName" class="admin-form-input" required placeholder="e.g. Santos">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="admin-form-group">
+              <label for="naPhone">Contact Phone *</label>
+              <input type="tel" id="naPhone" class="admin-form-input" required placeholder="0917 123 4567">
+            </div>
+            <div class="admin-form-group">
+              <label for="naEmail">Email Address (Optional)</label>
+              <input type="email" id="naEmail" class="admin-form-input" placeholder="client@email.com">
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="naServiceSelect">Treatment Service *</label>
+            <select id="naServiceSelect" class="admin-form-select" required>
+              <!-- Filled via admin.js -->
+            </select>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="admin-form-group">
+              <label for="naDate">Appointment Date *</label>
+              <input type="date" id="naDate" class="admin-form-input" required>
+            </div>
+            <div class="admin-form-group">
+              <label for="naTime">Time Slot *</label>
+              <select id="naTime" class="admin-form-select" required>
+                <option value="10:00 AM">10:00 AM</option>
+                <option value="11:00 AM">11:00 AM</option>
+                <option value="12:00 PM">12:00 PM</option>
+                <option value="1:00 PM">1:00 PM</option>
+                <option value="2:00 PM" selected>2:00 PM</option>
+                <option value="3:00 PM">3:00 PM</option>
+                <option value="4:00 PM">4:00 PM</option>
+                <option value="5:00 PM">5:00 PM</option>
+                <option value="6:00 PM">6:00 PM</option>
+                <option value="7:00 PM">7:00 PM</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="admin-form-group">
+              <label for="naSpecialist">Assigned Specialist</label>
+              <select id="naSpecialist" class="admin-form-select">
+                <option value="Nurse Roselie (Lead Aesthetician)">Nurse Roselie (Lead Aesthetician)</option>
+                <option value="Dr. Sarah (Laser & Skin Specialist)">Dr. Sarah (Laser & Skin Specialist)</option>
+                <option value="Therapist Camille (Skin & Drip Expert)">Therapist Camille (Skin & Drip Expert)</option>
+                <option value="Master Stylist Mark (Hair Couture)">Master Stylist Mark (Hair Couture)</option>
+              </select>
+            </div>
+            <div class="admin-form-group">
+              <label for="naStatus">Initial Status</label>
+              <select id="naStatus" class="admin-form-select">
+                <option value="Confirmed" selected>Confirmed</option>
+                <option value="Pending">Pending</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="naNotes">Client Notes</label>
+            <textarea id="naNotes" class="admin-form-textarea" rows="2" placeholder="e.g. Phone reservation, special requests..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary-admin" onclick="closeModal('modalNewAppointment')">Cancel</button>
+          <button type="submit" class="btn-primary-admin">Save Reservation</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Order Details -->
+  <div class="modal-backdrop" id="modalOrderDetail">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modTitle">Boutique Order Details</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalOrderDetail')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-voucher-box">
+          <div class="detail-row">
+            <span>Order Number:</span>
+            <strong id="modCode">RBL-ORD-88214</strong>
+          </div>
+          <div class="detail-row">
+            <span>Customer Name:</span>
+            <strong id="modName">Anna Marie</strong>
+          </div>
+          <div class="detail-row">
+            <span>Contact Phone:</span>
+            <strong id="modPhone">0917 123 4567</strong>
+          </div>
+          <div class="detail-row">
+            <span>Delivery / Pickup:</span>
+            <strong id="modAddress">Unit 4B, Makati City</strong>
+          </div>
+          <div class="detail-row">
+            <span>Payment Mode:</span>
+            <strong id="modPayment">GCash</strong>
+          </div>
+          <div class="detail-row">
+            <span>Order Total:</span>
+            <strong id="modTotal" class="text-rose">₱2,349.00</strong>
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label>Purchased Items:</label>
+          <div id="modItemsList" style="background:#FAF8F8; padding:12px; border-radius:var(--radius-sm); border:1px solid var(--light-border);"></div>
+        </div>
+
+        <div class="admin-form-group">
+          <label for="modStatusSelect">Order Fulfillment Status:</label>
+          <select id="modStatusSelect" class="admin-form-select">
+            <option value="Pending">Pending</option>
+            <option value="Processing">Processing</option>
+            <option value="Ready for Pickup">Ready for Pickup / Shipped</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary-admin" onclick="closeModal('modalOrderDetail')">Close</button>
+        <button class="btn-primary-admin" id="modSaveStatusBtn">Save Status</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Edit / Add Service -->
+  <div class="modal-backdrop" id="modalServiceForm">
+    <div class="modal-box wide">
+      <div class="modal-header">
+        <h3 id="msfTitle">Edit Treatment Service</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalServiceForm')">&times;</button>
+      </div>
+      <form id="serviceEditForm">
+        <input type="hidden" id="msfId">
+        <div class="modal-body">
+          <div class="form-grid-2">
+            <div class="admin-form-group">
+              <label for="msfName">Service Name *</label>
+              <input type="text" id="msfName" class="admin-form-input" required>
+            </div>
+            <div class="admin-form-group">
+              <label for="msfCategory">Category *</label>
+              <select id="msfCategory" class="admin-form-select" required>
+                <option value="gluta">Gluta Drips &amp; Push</option>
+                <option value="facial">Facial &amp; Skin Care</option>
+                <option value="laser">Laser Clinic</option>
+                <option value="hair">Hair Studio</option>
+                <option value="nails">Nail Spa &amp; Foot Care</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="admin-form-group">
+              <label for="msfPrice">Single Session Price (PHP) *</label>
+              <input type="number" id="msfPrice" class="admin-form-input" required min="0" step="1">
+            </div>
+            <div class="admin-form-group">
+              <label for="msfDuration">Duration (e.g. 45 mins)</label>
+              <input type="text" id="msfDuration" class="admin-form-input" value="45 mins">
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="admin-form-group">
+              <label for="msfPackageAvailable">5+1 Package Offer Available?</label>
+              <select id="msfPackageAvailable" class="admin-form-select">
+                <option value="true">Yes (5+1 Package Available)</option>
+                <option value="false">No (Single Session Only)</option>
+              </select>
+            </div>
+            <div class="admin-form-group">
+              <label for="msfPackagePrice">5+1 Package Price (PHP)</label>
+              <input type="number" id="msfPackagePrice" class="admin-form-input" min="0" step="1" placeholder="Auto-calculated (Price x 5)">
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="msfDesc">Treatment Description</label>
+            <textarea id="msfDesc" class="admin-form-textarea" rows="3" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary-admin" onclick="closeModal('modalServiceForm')">Cancel</button>
+          <button type="submit" class="btn-primary-admin">Save Service to Catalog</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: CMS Review Edit/Add -->
+  <div class="modal-backdrop" id="modalCmsReview">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="mcrTitle">Edit Client Testimonial</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalCmsReview')">&times;</button>
+      </div>
+      <form id="cmsReviewForm">
+        <input type="hidden" id="mcrId">
+        <div class="modal-body">
+          <div class="form-grid-2">
+            <div class="admin-form-group">
+              <label for="mcrName">Client Name *</label>
+              <input type="text" id="mcrName" class="admin-form-input" required placeholder="e.g. Bea P.">
+            </div>
+            <div class="admin-form-group">
+              <label for="mcrRating">Rating (Stars) *</label>
+              <select id="mcrRating" class="admin-form-select">
+                <option value="5" selected>5 Stars (★★★★★)</option>
+                <option value="4">4 Stars (★★★★☆)</option>
+                <option value="3">3 Stars (★★★☆☆)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="mcrTag">Client Tag / Treatment Availed *</label>
+            <input type="text" id="mcrTag" class="admin-form-input" required placeholder="e.g. Regular Client • Japan Drip &amp; Mermaid Facial">
+          </div>
+
+          <div class="admin-form-group">
+            <label for="mcrComment">Review Quote / Testimonial *</label>
+            <textarea id="mcrComment" class="admin-form-textarea" rows="4" required placeholder="Client feedback..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary-admin" onclick="closeModal('modalCmsReview')">Cancel</button>
+          <button type="submit" class="btn-primary-admin">Save Review</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: CMS FAQ Edit/Add -->
+  <div class="modal-backdrop" id="modalCmsFaq">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="mcfTitle">Edit FAQ Item</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalCmsFaq')">&times;</button>
+      </div>
+      <form id="cmsFaqForm">
+        <input type="hidden" id="mcfId">
+        <div class="modal-body">
+          <div class="admin-form-group">
+            <label for="mcfQuestion">Question *</label>
+            <input type="text" id="mcfQuestion" class="admin-form-input" required placeholder="e.g. How does the 5 + 1 Session Package work?">
+          </div>
+
+          <div class="admin-form-group">
+            <label for="mcfAnswer">Answer *</label>
+            <textarea id="mcfAnswer" class="admin-form-textarea" rows="4" required placeholder="Detailed response..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary-admin" onclick="closeModal('modalCmsFaq')">Cancel</button>
+          <button type="submit" class="btn-primary-admin">Save FAQ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: CMS Retail Product Edit/Add -->
+  <div class="modal-backdrop" id="modalCmsProduct">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="mcpTitle">Edit Retail Skincare Product</h3>
+        <button class="btn-close-modal" onclick="closeModal('modalCmsProduct')">&times;</button>
+      </div>
+      <form id="cmsProductForm">
+        <input type="hidden" id="mcpId">
+        <div class="modal-body">
+          <div class="admin-form-group">
+            <label for="mcpName">Product Name *</label>
+            <input type="text" id="mcpName" class="admin-form-input" required placeholder="e.g. Platinum Gluta-C Glow Capsules (60s)">
+          </div>
+
+          <div class="form-grid-2">
+            <div class="admin-form-group">
+              <label for="mcpPrice">Retail Price (PHP) *</label>
+              <input type="number" id="mcpPrice" class="admin-form-input" required min="0" step="1" placeholder="1250">
+            </div>
+            <div class="admin-form-group">
+              <label for="mcpTag">Highlight Tag / Badge</label>
+              <input type="text" id="mcpTag" class="admin-form-input" placeholder="e.g. Best Seller, Essential, Clinical">
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label for="mcpDesc">Product Description *</label>
+            <textarea id="mcpDesc" class="admin-form-textarea" rows="3" required placeholder="Benefits and usage..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary-admin" onclick="closeModal('modalCmsProduct')">Cancel</button>
+          <button type="submit" class="btn-primary-admin">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Toast Container -->
+  <div class="admin-toast-container" id="adminToastContainer"></div>
+
+  <!-- Admin Application Logic Script -->
+  <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><OutputType>WinExe</OutputType><TargetFramework>net10.0-windows</TargetFramework><UseWPF>true</UseWPF><AssemblyName>Roselie.Setup</AssemblyName><PlatformTarget>x64</PlatformTarget><Version>0.2.1</Version><ApplicationIcon>../Roselie.App/Assets/Roselie.ico</ApplicationIcon></PropertyGroup>
+ <ItemGroup><EmbeddedResource Include="../../artifacts/installer-payload.zip" Condition="Exists('../../artifacts/installer-payload.zip')" LogicalName="Roselie.Payload.zip"/></ItemGroup>
+ <ItemGroup><Resource Include="../Roselie.App/Assets/Roselie.ico" Link="Assets/Roselie.ico"/><Resource Include="../Roselie.App/Assets/logo.png" Link="Assets/logo.png"/></ItemGroup>
+</Project>

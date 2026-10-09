@@ -1,0 +1,88 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ResourceDictionary.MergedDictionaries><ResourceDictionary Source="Palette.xaml"/></ResourceDictionary.MergedDictionaries>
+  <Style x:Key="ModernDataGrid" TargetType="DataGrid" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    <Setter Property="AutoGenerateColumns" Value="False" />
+    <Setter Property="IsReadOnly" Value="True" />
+    <Setter Property="CanUserAddRows" Value="False" />
+    <Setter Property="GridLinesVisibility" Value="Horizontal" />
+    <Setter Property="HorizontalGridLinesBrush" Value="#F3E7E7" />
+    <Setter Property="RowBackground" Value="White" />
+    <Setter Property="AlternatingRowBackground" Value="#FCF9F9" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="HeadersVisibility" Value="Column" />
+    <Setter Property="RowHeight" Value="44" />
+    <Setter Property="SelectionMode" Value="Single" />
+    <Setter Property="RowStyle">
+      <Setter.Value>
+        <Style TargetType="DataGridRow">
+          <Setter Property="Background" Value="White" />
+          <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter Property="Background" Value="#FDF3F3" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter Property="Background" Value="#FCE8E8" />
+              <Setter Property="Foreground" Value="{StaticResource InkBrush}" />
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="DataGridColumnHeader" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    <Setter Property="Background" Value="#F3E7E7" />
+    <Setter Property="Foreground" Value="{StaticResource DarkRoseBrush}" />
+    <Setter Property="Padding" Value="14,10" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="BorderThickness" Value="0,0,0,1" />
+    <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+  </Style>
+  <Style TargetType="DataGridCell" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    <Setter Property="Padding" Value="12,6" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="DataGridCell">
+          <Border Background="{TemplateBinding Background}" BorderThickness="0" Padding="{TemplateBinding Padding}">
+            <ContentPresenter VerticalAlignment="Center" />
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="TabControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+  <Style TargetType="TabItem" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    <Setter Property="Padding" Value="20,10" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="TabItem">
+          <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="8,8,0,0" Padding="{TemplateBinding Padding}" Margin="0,0,4,0" BorderThickness="0,0,0,2" BorderBrush="Transparent" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+            <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="border" Property="Background" Value="#FAF0F0" />
+              <Setter Property="Foreground" Value="{StaticResource DarkRoseBrush}" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter TargetName="border" Property="Background" Value="White" />
+              <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource RoseBrush}" />
+              <Setter Property="Foreground" Value="{StaticResource DarkRoseBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style TargetType="DataGrid" BasedOn="{StaticResource ModernDataGrid}" />
+</ResourceDictionary>
+

@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roselie's Beauty Lounge — Official Website & Booking</title>
+  <meta name="description" content="Premier luxury beauty lounge & aesthetic clinic. Gluta Drips, Pico & Diode Lasers, Facials, Hair Styling, and Nail Spa in an atmosphere of serene indulgence.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  
+  <!-- Google Fonts: Cormorant Garamond for luxury serif + Plus Jakarta Sans for modern clean UI -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome for iconography -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top Announcement Bar -->
+  <div class="announcement-bar">
+    <div class="container announcement-inner">
+      <div class="announcement-text">
+        <span class="badge-gold">PROMO</span> Book any 5 sessions &amp; get your <strong>6th session FREE</strong> on all signature laser &amp; gluta treatments!
+      </div>
+      <div class="announcement-meta">
+        <span><i class="fa-regular fa-clock"></i> Daily 10:00 AM – 8:00 PM</span>
+        <span class="divider">•</span>
+        <a href="tel:+639171234567"><i class="fa-solid fa-phone"></i> +63 917 123 4567</a>
+        <span class="divider">•</span>
+        <a href="admin.html" class="top-admin-badge" style="color:var(--gold); font-weight:600; text-decoration:none;"><i class="fa-solid fa-user-shield"></i> Staff Admin</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="site-header" id="header">
+    <div class="container header-inner">
+      <a href="#home" class="brand-logo">
+        <img src="assets/logo.png" alt="Roselie's Beauty Lounge Logo" class="logo-img">
+      </a>
+
+      <nav class="main-nav" id="mainNav">
+        <ul class="nav-list">
+          <li><a href="#home" class="nav-link active">Home</a></li>
+          <li><a href="#services" class="nav-link">Treatments &amp; Menu</a></li>
+          <li><a href="#packages" class="nav-link">5+1 Packages</a></li>
+          <li><a href="#store" class="nav-link">Beauty Store</a></li>
+          <li><a href="#experience" class="nav-link">About Lounge</a></li>
+          <li><a href="#calculator" class="nav-link">Bundle Builder</a></li>
+          <li><a href="#contact" class="nav-link">Visit Us</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button class="cart-btn" id="openCartBtn" aria-label="Open Shopping Cart">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="cart-badge" id="cartCount">0</span>
+        </button>
+        <a href="admin.html" class="cart-btn" style="text-decoration:none;" title="Staff Admin Portal" aria-label="Staff Portal">
+          <i class="fa-solid fa-user-shield"></i>
+        </a>
+        <a href="#booking" class="btn btn-primary nav-book-btn">
+          <i class="fa-regular fa-calendar-check"></i> Book Now
+        </a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="home">
+    <div class="hero-overlay"></div>
+    <div class="container hero-container">
+      <div class="hero-content">
+        <div class="hero-tag" id="heroTag">
+          <span class="sparkle">✦</span> Luxury Aesthetics &amp; Beauty Lounge <span class="sparkle">✦</span>
+        </div>
+        <h1 class="hero-title" id="heroTitle">
+          Where Elegance Meets <br>
+          <span class="text-gradient-gold">Aesthetic Perfection</span>
+        </h1>
+        <p class="hero-description" id="heroDesc">
+          Step into a sanctuary of transformative wellness. Experience medical-grade gluta drips, pain-free diode lasers, advanced hydro-facials, and couture salon treatments tailored to unveil your luminous best.
+        </p>
+        <div class="hero-cta-group">
+          <a href="#booking" class="btn btn-gold btn-lg">
+            <i class="fa-regular fa-calendar-check"></i> Book Appointment
+          </a>
+          <a href="#services" class="btn btn-outline-light btn-lg">
+            <i class="fa-solid fa-sparkles"></i> View Treatment Menu
+          </a>
+        </div>
+        <div class="hero-features">
+          <div class="hero-feat-item">
+            <i class="fa-solid fa-certificate"></i>
+            <div>
+              <strong id="feat1Title">Certified Specialists</strong>
+              <span id="feat1Sub">Board-trained aestheticians</span>
+            </div>
+          </div>
+          <div class="hero-feat-item">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <div>
+              <strong id="feat2Title">Medical Grade Tech</strong>
+              <span id="feat2Sub">Diode Ice &amp; Pico Lasers</span>
+            </div>
+          </div>
+          <div class="hero-feat-item">
+            <i class="fa-solid fa-gem"></i>
+            <div>
+              <strong id="feat3Title">100% Authentic Drips</strong>
+              <span id="feat3Sub">Japan &amp; Korea Formulated</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card-frame">
+          <img src="assets/login-hero.jpg" alt="Roselie's Beauty Lounge Signature Model" class="hero-model-img">
+          <div class="floating-badge badge-top">
+            <i class="fa-solid fa-star"></i>
+            <div>
+              <strong id="heroRatingVal">5.0 / 5.0 Rating</strong>
+              <span id="heroRatingSub">Over 1,200+ Radiant Clients</span>
+            </div>
+          </div>
+          <div class="floating-badge badge-bottom">
+            <i class="fa-solid fa-sparkles"></i>
+            <div>
+              <strong id="heroPromoBadgeTitle">Signature 5+1 Sessions</strong>
+              <span id="heroPromoBadgeSub">Buy 5 Get 1 Complimentary</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Highlight Bar -->
+  <section class="trust-bar">
+    <div class="container trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fa-solid fa-syringe"></i></div>
+        <div class="trust-text">
+          <h3>Gluta Drips &amp; Aesthetics</h3>
+          <p>Potent antioxidants, skin lightening, and anti-aging IV infusions.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fa-solid fa-bolt-lightning"></i></div>
+        <div class="trust-text">
+          <h3>Pico &amp; Diode Lasers</h3>
+          <p>Pain-free permanent hair removal, skin rejuvenation, and pigment clearing.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fa-solid fa-spa"></i></div>
+        <div class="trust-text">
+          <h3>Clinical Facials &amp; RF</h3>
+          <p>Hydra-dermabrasion, microneedling, skin tightening, and contouring.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon"><i class="fa-solid fa-scissors"></i></div>
+        <div class="trust-text">
+          <h3>Couture Hair &amp; Nail Spa</h3>
+          <p>L'Oréal rebonding, Brazilian blowout, gel overlays, and foot pampering.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Treatment & Services Menu -->
+  <section class="section services-section" id="services">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-subtitle">Our Curated Treatment Menu</span>
+        <h2 class="section-title">Indulgent Beauty &amp; Aesthetic Care</h2>
+        <div class="section-divider"></div>
+        <p class="section-lead">
+          Every treatment is administered in our private, sanitized suites using top-tier imported formulations and medical-grade aesthetic devices.
+        </p>
+      </div>
+
+      <!-- Category Filter Pills & Search -->
+      <div class="service-controls">
+        <div class="category-tabs" id="categoryTabs">
+          <button class="cat-pill active" data-category="all">All Treatments</button>
+          <button class="cat-pill" data-category="gluta">Gluta Drip &amp; Push</button>
+          <button class="cat-pill" data-category="facial">Facial &amp; Skin Care</button>
+          <button class="cat-category-btn cat-pill" data-category="laser">Laser Clinic</button>
+          <button class="cat-pill" data-category="hair">Hair Studio</button>
+          <button class="cat-pill" data-category="nails">Nail &amp; Foot Care</button>
+        </div>
+        <div class="service-search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="serviceSearchInput" placeholder="Search treatments, facials, laser...">
+          <button id="clearSearchBtn" class="clear-search-btn" style="display:none;">&times;</button>
+        </div>
+      </div>
+
+      <!-- Services Grid -->
+      <div class="services-grid" id="servicesGrid">
+        <!-- Generated Dynamically via app.js -->
+      </div>
+
+      <div class="services-footer-banner">
+        <div class="footer-banner-content">
+          <h3>Need help choosing the right treatment for your skin type?</h3>
+          <p>Consult with our lead aesthetic specialist for free before your session.</p>
+        </div>
+        <a href="#booking" class="btn btn-gold"><i class="fa-regular fa-comment-dots"></i> Request Free Consultation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Signature 5+1 Packages Section -->
+  <section class="section packages-section" id="packages">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-subtitle">Exclusive Value Offers</span>
+        <h2 class="section-title">Signature 5 + 1 Session Packages</h2>
+        <div class="section-divider"></div>
+        <p class="section-lead">
+          Commit to your transformation. Purchase 5 sessions of our clinical treatments and receive your <strong>6th session completely free</strong> with VIP priority scheduling.
+        </p>
+      </div>
+
+      <div class="packages-grid" id="packagesGrid">
+        <!-- Rendered via app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Online Appointment Booking Engine -->
+  <section class="section booking-section" id="booking">
+    <div class="container">
+      <div class="booking-wrapper">
+        <div class="booking-intro">
+          <span class="section-subtitle text-light">Reserve Your Sanctuary</span>
+          <h2 class="section-title text-light">Book Your Lounge Appointment</h2>
+          <p class="booking-intro-text">
+            Schedule your personalized session effortlessly. Select your services, pick your preferred date and time, and our salon concierge will prepare your private suite.
+          </p>
+          <div class="booking-highlights">
+            <div class="b-highlight-item">
+              <i class="fa-solid fa-clock-rotate-left"></i>
+              <div>
+                <strong>Instant Confirmation</strong>
+                <span>Real-time booking voucher &amp; SMS notice</span>
+              </div>
+            </div>
+            <div class="b-highlight-item">
+              <i class="fa-solid fa-shield-heart"></i>
+              <div>
+                <strong>Flexible Rescheduling</strong>
+                <span>Reschedule up to 2 hours before your slot</span>
+              </div>
+            </div>
+            <div class="b-highlight-item">
+              <i class="fa-solid fa-mug-hot"></i>
+              <div>
+                <strong>Complimentary VIP Refreshments</strong>
+                <span>Artisan teas &amp; collagens served in lounge</span>
+              </div>
+            </div>
+          </div>
+          <div class="booking-contact-card">
+            <h4>Prefer booking by phone or chat?</h4>
+            <p>Our concierge is available daily:</p>
+            <div class="concierge-links">
+              <a href="tel:+639171234567" id="bookingPhoneLink" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-phone"></i> +63 917 123 4567</a>
+              <a href="https://facebook.com" id="bookingFbLink" target="_blank" rel="noopener noreferrer" class="btn btn-outline-light btn-sm"><i class="fa-brands fa-facebook"></i> Facebook</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Booking Form Card -->
+        <div class="booking-form-card">
+          <div class="booking-steps-bar">
+            <div class="step-indicator active" data-step="1"><span>1</span> Service</div>
+            <div class="step-indicator" data-step="2"><span>2</span> Date &amp; Time</div>
+            <div class="step-indicator" data-step="3"><span>3</span> Your Details</div>
+            <div class="step-indicator" data-step="4"><span>4</span> Confirmation</div>
+          </div>
+
+          <form id="bookingForm" class="booking-form" novalidate>
+            <!-- Step 1: Select Service -->
+            <div class="form-step active" id="formStep1">
+              <h3 class="step-title">Select Treatment or Package</h3>
+              <p class="step-desc">Choose from our clinical aesthetics, hair, nail, or laser services.</p>
+              
+              <div class="form-group">
+                <label for="bookingCategory">Treatment Category *</label>
+                <select id="bookingCategory" class="form-control" required>
+                  <option value="">-- Choose Category --</option>
+                  <option value="gluta">Gluta Drips &amp; Aesthetic Treatments</option>
+                  <option value="facial">Facial &amp; Advanced Skin Care</option>
+                  <option value="laser">Pico &amp; Diode Laser Clinic</option>
+                  <option value="hair">Hair Care &amp; Couture Styling</option>
+                  <option value="nails">Nail Spa &amp; Foot Care</option>
+                  <option value="package">Signature 5+1 Packages</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="bookingService">Select Service *</label>
+                <select id="bookingService" class="form-control" required disabled>
+                  <option value="">-- Select a Category First --</option>
+                </select>
+              </div>
+
+              <div class="service-preview-card" id="servicePreviewCard" style="display:none;">
+                <div class="sp-details">
+                  <h4 id="spName">Hydra Facial</h4>
+                  <p id="spDesc">Deep vacuum pore cleansing, exfoliation, hydration infusion</p>
+                  <div class="sp-meta">
+                    <span class="sp-duration"><i class="fa-regular fa-clock"></i> ~60 mins</span>
+                    <span class="sp-price" id="spPrice">₱599.00</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="step-actions right">
+                <button type="button" class="btn btn-primary" id="btnNextToStep2">
+                  Continue to Schedule <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 2: Date & Time -->
+            <div class="form-step" id="formStep2">
+              <h3 class="step-title">Choose Preferred Date &amp; Time</h3>
+              <p class="step-desc">Salon opens daily 10:00 AM – 8:00 PM.</p>
+
+              <div class="form-group">
+                <label for="bookingDate">Appointment Date *</label>
+                <input type="date" id="bookingDate" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label>Available Time Slots *</label>
+                <div class="time-slots-grid" id="timeSlotsGrid">
+                  <!-- Generated via app.js -->
+                </div>
+                <input type="hidden" id="selectedTimeSlot" required>
+              </div>
+
+              <div class="form-group">
+                <label for="bookingSpecialist">Preferred Specialist (Optional)</label>
+                <select id="bookingSpecialist" class="form-control">
+                  <option value="any">First Available Senior Aesthetician</option>
+                  <option value="specialist-1">Nurse Roselie (Lead Aesthetician)</option>
+                  <option value="specialist-2">Dr. Sarah (Laser &amp; Skin Specialist)</option>
+                  <option value="specialist-3">Therapist Camille (Skin &amp; Drip Expert)</option>
+                  <option value="specialist-4">Master Stylist Mark (Hair Couture)</option>
+                </select>
+              </div>
+
+              <div class="step-actions between">
+                <button type="button" class="btn btn-outline" id="btnBackToStep1">
+                  <i class="fa-solid fa-arrow-left"></i> Back
+                </button>
+                <button type="button" class="btn btn-primary" id="btnNextToStep3">
+                  Continue to Details <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 3: Client Details -->
+            <div class="form-step" id="formStep3">
+              <h3 class="step-title">Your Client Details</h3>
+              <p class="step-desc">We will send your appointment confirmation &amp; reminders here.</p>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="clientFirstName">First Name *</label>
+                  <input type="text" id="clientFirstName" class="form-control" placeholder="e.g. Maria" required>
+                </div>
+                <div class="form-group col-6">
+                  <label for="clientLastName">Last Name *</label>
+                  <input type="text" id="clientLastName" class="form-control" placeholder="e.g. Santos" required>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group col-6">
+                  <label for="clientPhone">Mobile Number (PH) *</label>
+                  <input type="tel" id="clientPhone" class="form-control" placeholder="0917 123 4567" required>
+                </div>
+                <div class="form-group col-6">
+                  <label for="clientEmail">Email Address (Optional)</label>
+                  <input type="email" id="clientEmail" class="form-control" placeholder="maria@gmail.com">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="clientNotes">Special Requests or Medical Notes (Optional)</label>
+                <textarea id="clientNotes" class="form-control" rows="2" placeholder="e.g. First time getting Pico laser; skin allergies; preferred music"></textarea>
+              </div>
+
+              <div class="booking-summary-box">
+                <h4>Appointment Review</h4>
+                <div class="bs-row"><span>Service:</span> <strong id="bsService">-</strong></div>
+                <div class="bs-row"><span>Schedule:</span> <strong id="bsDateTime">-</strong></div>
+                <div class="bs-row"><span>Total Amount:</span> <strong id="bsPrice" class="text-rose">₱0.00</strong></div>
+                <div class="bs-note"><i class="fa-solid fa-circle-check"></i> Pay at the salon counter (Cash, GCash, Maya, or Card). No online deposit required.</div>
+              </div>
+
+              <div class="step-actions between">
+                <button type="button" class="btn btn-outline" id="btnBackToStep2">
+                  <i class="fa-solid fa-arrow-left"></i> Back
+                </button>
+                <button type="submit" class="btn btn-gold btn-lg" id="btnConfirmBooking">
+                  <i class="fa-solid fa-check"></i> Confirm Reservation
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 4: Booking Confirmed -->
+            <div class="form-step" id="formStep4">
+              <div class="confirmation-card text-center">
+                <div class="conf-icon"><i class="fa-solid fa-circle-check"></i></div>
+                <h3 class="conf-title">Reservation Confirmed!</h3>
+                <p class="conf-subtitle">We look forward to pampering you at Roselie's Beauty Lounge.</p>
+
+                <div class="booking-ticket">
+                  <div class="ticket-header">
+                    <span>APPOINTMENT VOUCHER</span>
+                    <strong id="confBookingId">RBL-8921</strong>
+                  </div>
+                  <div class="ticket-body">
+                    <div class="tb-item"><span>Client:</span> <strong id="confClientName">Maria Santos</strong></div>
+                    <div class="tb-item"><span>Treatment:</span> <strong id="confService">Hydra Facial</strong></div>
+                    <div class="tb-item"><span>Date &amp; Time:</span> <strong id="confSchedule">Oct 12, 2026 at 2:00 PM</strong></div>
+                    <div class="tb-item"><span>Specialist:</span> <strong id="confSpecialist">Lead Aesthetician</strong></div>
+                    <div class="tb-item"><span>Payable at Lounge:</span> <strong id="confPrice" class="text-rose">₱599.00</strong></div>
+                  </div>
+                  <div class="ticket-footer">
+                    <span>Roselie's Beauty Lounge • 10:00 AM – 8:00 PM</span>
+                  </div>
+                </div>
+
+                <div class="conf-actions">
+                  <button type="button" class="btn btn-outline" id="btnDownloadIcs">
+                    <i class="fa-regular fa-calendar-plus"></i> Add to Calendar
+                  </button>
+                  <a id="btnShareWhatsApp" href="#" target="_blank" class="btn btn-outline">
+                    <i class="fa-brands fa-whatsapp"></i> Send to WhatsApp
+                  </a>
+                  <button type="button" class="btn btn-primary" id="btnNewBooking">
+                    Book Another Service
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Custom Pamper Package Builder -->
+  <section class="section calculator-section" id="calculator">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-subtitle">Personalized Beauty Day</span>
+        <h2 class="section-title">Build Your Custom Pamper Bundle</h2>
+        <div class="section-divider"></div>
+        <p class="section-lead">
+          Mix and match your favorite aesthetic and salon rituals. Enjoy an instant <strong>10% package discount</strong> when bundling 3 or more services!
+        </p>
+      </div>
+
+      <div class="builder-layout">
+        <div class="builder-catalog">
+          <h3>1. Select Services to Bundle</h3>
+          <div class="builder-items-grid" id="builderItemsGrid">
+            <!-- Dynamically populated via app.js -->
+          </div>
+        </div>
+
+        <div class="builder-summary-card">
+          <div class="summary-header">
+            <h3>Your Beauty Day Itinerary</h3>
+            <span class="bundle-count" id="bundleCount">0 items selected</span>
+          </div>
+
+          <div class="summary-list" id="bundleSelectedList">
+            <div class="empty-bundle-notice">
+              <i class="fa-regular fa-hand-pointer"></i>
+              <p>Click treatments on the left to add them to your personalized pamper package.</p>
+            </div>
+          </div>
+
+          <div class="summary-math">
+            <div class="math-row">
+              <span>Standard Retail Price:</span>
+              <span id="bundleRegularTotal">₱0.00</span>
+            </div>
+            <div class="math-row discount-row" id="bundleDiscountRow" style="display:none;">
+              <span>Bundle Discount (10% OFF):</span>
+              <span id="bundleDiscountAmount">-₱0.00</span>
+            </div>
+            <div class="math-row total-row">
+              <span>Package Total:</span>
+              <strong id="bundleFinalTotal" class="text-rose">₱0.00</strong>
+            </div>
+          </div>
+
+          <button class="btn btn-gold btn-block" id="btnBookCustomBundle" disabled>
+            <i class="fa-regular fa-calendar-check"></i> Book This Custom Package
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Retail Skincare & Beauty Boutique Store -->
+  <section class="section store-section" id="store">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-subtitle">Take The Lounge Glow Home</span>
+        <h2 class="section-title">Roselie's Curated Skincare Boutique</h2>
+        <div class="section-divider"></div>
+        <p class="section-lead">
+          Maintain your aesthetic results between sessions with our dermatologist-approved skincare formulations, clinical aftercare serums, and oral gluta boosters.
+        </p>
+      </div>
+
+      <div class="store-grid" id="storeGrid">
+        <!-- Generated via app.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- About Roselie's Beauty Lounge -->
+  <section class="section experience-section" id="experience">
+    <div class="container experience-grid">
+      <div class="exp-image-wrap">
+        <img src="assets/login-hero.jpg" alt="Roselie's Beauty Lounge Experience" class="exp-img">
+        <div class="exp-badge">
+          <span class="exp-years" id="aboutYears">5+</span>
+          <span class="exp-years-text" id="aboutYearsText">Years of Aesthetic Excellence</span>
+        </div>
+      </div>
+
+      <div class="exp-content">
+        <span class="section-subtitle" id="aboutSubtitle">The Sanctuary Experience</span>
+        <h2 class="section-title" id="aboutTitle">Luxury Aesthetics Rooted in Care &amp; Science</h2>
+        <div class="section-divider left"></div>
+        <p id="aboutPara1">
+          Founded with a passion for transformative beauty, <strong>Roselie's Beauty Lounge</strong> provides an elevated salon and clinical aesthetics escape where relaxation and visible results coexist seamlessly.
+        </p>
+        <p id="aboutPara2">
+          From the moment you step through our doors, our dedicated team of licensed aestheticians and master stylists caters to your every comfort in private, meticulously sterilized suites designed for deep rejuvenation.
+        </p>
+
+        <div class="lounge-pillars">
+          <div class="pillar-item">
+            <div class="pillar-icon"><i class="fa-solid fa-pump-medical"></i></div>
+            <div>
+              <strong id="pillar1Title">Hospital-Grade Hygiene</strong>
+              <span id="pillar1Desc">Autoclaved instruments and single-use consumables for every client.</span>
+            </div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-icon"><i class="fa-solid fa-microscope"></i></div>
+            <div>
+              <strong id="pillar2Title">Authentic Formulations</strong>
+              <span id="pillar2Desc">Directly imported Korean hydro-solutions and Japanese medical gluta drips.</span>
+            </div>
+          </div>
+          <div class="pillar-item">
+            <div class="pillar-icon"><i class="fa-solid fa-heart-pulse"></i></div>
+            <div>
+              <strong id="pillar3Title">Empathetic Consultation</strong>
+              <span id="pillar3Desc">No rushed appointments. Every treatment is customized to your unique goals.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Frequently Asked Questions -->
+  <section class="section faq-section" id="faq">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-subtitle">Got Questions?</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <div class="faq-accordion" id="faqAccordion">
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How does the 5 + 1 Session Package work?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>When you purchase any signature 5+1 package, you pay for 5 sessions and receive your 6th session completely free. Sessions can be scheduled whenever convenient over a 12-month period, with VIP priority booking slots.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Is the Diode Laser hair removal painful?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Our medical-grade Diode Ice Laser features active sapphire contact cooling (-5°C) that numbs the skin continuously throughout the pulse. Most clients describe it as feeling like a gentle cool glide with zero downtime.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How often can I receive a Gluta Drip or Push?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>For initial skin radiance and antioxidant benefits, treatments are generally scheduled once a week or once every two weeks. Our registered nurses assess your hydration, blood pressure, and medical history before every drip.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>What payment methods do you accept at the lounge?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>We accept Cash (PHP), GCash, Maya, Bank Transfer (BDO, BPI, UnionBank), and all major Credit and Debit Cards (Visa, Mastercard, JCB).</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Do you accept walk-in clients?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="faq-answer">
+            <p>Yes, walk-in clients are warmly welcomed! However, to avoid waiting times and secure your private treatment suite, we strongly recommend reserving your slot online via our booking engine.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact & Location Section -->
+  <section class="section contact-section" id="contact">
+    <div class="container contact-grid">
+      <div class="contact-info-card">
+        <span class="section-subtitle text-light">Find Our Sanctuary</span>
+        <h2 class="section-title text-light">Visit Roselie's Beauty Lounge</h2>
+        <div class="section-divider left"></div>
+        <p class="text-light-muted">
+          We invite you to experience tranquility and aesthetic mastery in person. Convenient parking is available right in front of the lounge.
+        </p>
+
+        <div class="c-detail-list">
+          <div class="c-detail-item">
+            <i class="fa-solid fa-location-dot"></i>
+            <div>
+              <strong>Lounge Address</strong>
+              <p id="contactAddressDisplay">Roselie's Beauty Lounge, Ground Floor, Commercial Center, Metro Manila, Philippines</p>
+            </div>
+          </div>
+          <div class="c-detail-item">
+            <i class="fa-solid fa-phone"></i>
+            <div>
+              <strong>Telephone &amp; Mobile</strong>
+              <p id="contactPhoneDisplay"><a id="contactPhoneLink" href="tel:+639171234567">+63 917 123 4567</a> • <a id="contactLandlineLink" href="tel:+63281234567">(02) 8123 4567</a></p>
+            </div>
+          </div>
+          <div class="c-detail-item">
+            <i class="fa-regular fa-clock"></i>
+            <div>
+              <strong>Operating Hours</strong>
+              <p id="contactHoursDisplay">Monday to Sunday: 10:00 AM – 8:00 PM <br>(Open on all regular holidays)</p>
+            </div>
+          </div>
+          <div class="c-detail-item">
+            <i class="fa-solid fa-envelope"></i>
+            <div>
+              <strong>Inquiries &amp; VIP Concierge</strong>
+              <p id="contactEmailDisplay"><a id="contactEmailLink" href="mailto:concierge@roseliesbeautylounge.com">concierge@roseliesbeautylounge.com</a></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="social-links-row">
+          <a id="socialFbLink" href="#" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a id="socialIgLink" href="#" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a id="socialTiktokLink" href="#" class="social-btn" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+          <a id="socialWaLink" href="#" class="social-btn" aria-label="Viber"><i class="fa-brands fa-viber"></i></a>
+        </div>
+      </div>
+
+      <div class="contact-form-card">
+        <h3>Send an Inquiry or Message</h3>
+        <p>Have special requests, bridal party inquiries, or corporate pamper bookings?</p>
+        <form id="contactForm" class="contact-form">
+          <div class="form-group">
+            <label for="contactName">Your Full Name *</label>
+            <input type="text" id="contactName" class="form-control" placeholder="e.g. Christine Reyes" required>
+          </div>
+          <div class="form-group">
+            <label for="contactPhone">Mobile Number *</label>
+            <input type="tel" id="contactPhone" class="form-control" placeholder="0917 000 0000" required>
+          </div>
+          <div class="form-group">
+            <label for="contactSubject">Subject / Interest</label>
+            <select id="contactSubject" class="form-control">
+              <option value="inquiry">General Treatment Inquiry</option>
+              <option value="packages">Bridal / Group Pamper Packages</option>
+              <option value="consultation">Laser &amp; Skin Consultation</option>
+              <option value="career">Career &amp; Aesthetician Openings</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="contactMessage">Your Message *</label>
+            <textarea id="contactMessage" class="form-control" rows="3" placeholder="Tell us about your needs..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-gold btn-block">
+            <i class="fa-regular fa-paper-plane"></i> Send Message
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide-in Shopping Cart & Booking Drawer -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <div class="dh-title">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <h3>Your Beauty Cart</h3>
+      </div>
+      <button class="drawer-close-btn" id="closeCartBtn">&times;</button>
+    </div>
+
+    <div class="drawer-body" id="cartItemsList">
+      <!-- Generated via app.js -->
+    </div>
+
+    <div class="drawer-footer" id="cartDrawerFooter">
+      <div class="drawer-subtotal">
+        <span>Subtotal:</span>
+        <strong id="cartSubtotal" class="text-rose">₱0.00</strong>
+      </div>
+      <p class="drawer-note">Orders can be picked up at the lounge or arranged via Grab/Lalamove delivery.</p>
+      <button class="btn btn-gold btn-block" id="btnCartCheckout">
+        <i class="fa-solid fa-check"></i> Proceed to Checkout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Cart Checkout Modal -->
+  <div class="modal" id="checkoutModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Boutique Order Checkout</h3>
+          <button class="modal-close-btn" id="closeCheckoutModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="checkoutForm">
+            <div class="checkout-summary-box" id="checkoutSummaryBox"></div>
+            
+            <div class="form-group">
+              <label for="chkName">Full Name *</label>
+              <input type="text" id="chkName" class="form-control" placeholder="e.g. Anna Marie" required>
+            </div>
+            <div class="form-group">
+              <label for="chkPhone">Contact Number *</label>
+              <input type="tel" id="chkPhone" class="form-control" placeholder="0917 123 4567" required>
+            </div>
+            <div class="form-group">
+              <label for="chkAddress">Delivery Address or Store Pickup *</label>
+              <textarea id="chkAddress" class="form-control" rows="2" placeholder="e.g. Unit 4B, Tower 2, Makati City (or type 'Store Pickup')" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="chkPayment">Payment Method</label>
+              <select id="chkPayment" class="form-control">
+                <option value="gcash">GCash (Instant QR)</option>
+                <option value="maya">Maya</option>
+                <option value="cod">Cash on Delivery (Metro Manila)</option>
+                <option value="pickup">Pay at Lounge Counter</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-gold btn-block btn-lg">
+              <i class="fa-solid fa-bag-shopping"></i> Complete Boutique Order
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Official Footer -->
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <div class="footer-col brand-col">
+        <img src="assets/logo.png" alt="Roselie's Beauty Lounge Logo" class="footer-logo">
+        <p class="footer-desc">
+          Premier luxury salon and medical aesthetics sanctuary. Dedicated to transformative skincare, laser artistry, and holistic rejuvenation in Metro Manila.
+        </p>
+        <div class="footer-socials">
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">Treatments</h4>
+        <ul class="footer-links">
+          <li><a href="#services">Gluta Drips &amp; Push</a></li>
+          <li><a href="#services">Hydra &amp; Mermaid Facials</a></li>
+          <li><a href="#services">Pico &amp; Diode Lasers</a></li>
+          <li><a href="#services">RF Contouring &amp; Slimming</a></li>
+          <li><a href="#services">L'Oréal Rebond &amp; Hair Spa</a></li>
+          <li><a href="#services">Gel Nails &amp; Foot Pampering</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#booking">Book Appointment Online</a></li>
+          <li><a href="#packages">Signature 5+1 Offers</a></li>
+          <li><a href="#calculator">Pamper Bundle Builder</a></li>
+          <li><a href="#store">Curated Skincare Boutique</a></li>
+          <li><a href="#experience">Lounge Standards &amp; Safety</a></li>
+          <li><a href="#faq">Frequently Asked Questions</a></li>
+          <li><a href="admin.html" style="color:var(--gold); font-weight:600;"><i class="fa-solid fa-lock"></i> Staff Admin Console</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">Hours &amp; Contact</h4>
+        <div class="footer-contact">
+          <p><i class="fa-solid fa-location-dot"></i> Ground Floor, Commercial Center, Metro Manila, Philippines</p>
+          <p><i class="fa-solid fa-phone"></i> +63 917 123 4567 / (02) 8123 4567</p>
+          <p><i class="fa-regular fa-clock"></i> Monday – Sunday: 10:00 AM – 8:00 PM</p>
+          <div class="footer-pill">
+            <span class="dot-green"></span> Now Accepting Online Reservations
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>&copy; 2026 Roselie's Beauty Lounge. All rights reserved. Registered Philippine Business.</p>
+        <div class="footer-legal">
+          <a href="#">Privacy Policy</a>
+          <span>•</span>
+          <a href="#">Terms of Service</a>
+          <span>•</span>
+          <a href="#">Sanitation Protocol</a>
+          <span>•</span>
+          <a href="admin.html" style="color:var(--gold); font-weight:600;"><i class="fa-solid fa-user-shield"></i> Staff Portal</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main JavaScript File -->
+  <script src="app.js"></script>
+</body>
+</html>
