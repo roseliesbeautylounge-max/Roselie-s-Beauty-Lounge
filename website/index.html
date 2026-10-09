@@ -46,7 +46,6 @@
           <li><a href="#home" class="nav-link active">Home</a></li>
           <li><a href="#services" class="nav-link">Treatments &amp; Menu</a></li>
           <li><a href="#packages" class="nav-link">5+1 Packages</a></li>
-          <li><a href="#store" class="nav-link">Beauty Store</a></li>
           <li><a href="#experience" class="nav-link">About Lounge</a></li>
           <li><a href="#calculator" class="nav-link">Bundle Builder</a></li>
           <li><a href="#contact" class="nav-link">Visit Us</a></li>
@@ -54,10 +53,6 @@
       </nav>
 
       <div class="header-actions">
-        <button class="cart-btn" id="openCartBtn" aria-label="Open Shopping Cart">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <span class="cart-badge" id="cartCount">0</span>
-        </button>
         <a href="#booking" class="btn btn-primary nav-book-btn">
           <i class="fa-regular fa-calendar-check"></i> Book Now
         </a>
@@ -517,24 +512,6 @@
     </div>
   </section>
 
-  <!-- Retail Skincare & Beauty Boutique Store -->
-  <section class="section store-section" id="store">
-    <div class="container">
-      <div class="section-header text-center">
-        <span class="section-subtitle">Take The Lounge Glow Home</span>
-        <h2 class="section-title">Roselie's Curated Skincare Boutique</h2>
-        <div class="section-divider"></div>
-        <p class="section-lead">
-          Maintain your aesthetic results between sessions with our dermatologist-approved skincare formulations, clinical aftercare serums, and oral gluta boosters.
-        </p>
-      </div>
-
-      <div class="store-grid" id="storeGrid">
-        <!-- Generated via app.js -->
-      </div>
-    </div>
-  </section>
-
   <!-- About Roselie's Beauty Lounge -->
   <section class="section experience-section" id="experience">
     <div class="container experience-grid">
@@ -664,7 +641,7 @@
             <i class="fa-solid fa-location-dot"></i>
             <div>
               <strong>Lounge Address</strong>
-              <p id="contactAddressDisplay">Roselie's Beauty Lounge, Ground Floor, Commercial Center, Metro Manila, Philippines</p>
+              <p id="contactAddressDisplay">Roselie's Beauty Lounge, Commercial Center</p>
             </div>
           </div>
           <div class="c-detail-item">
@@ -731,75 +708,6 @@
     </div>
   </section>
 
-  <!-- Slide-in Shopping Cart & Booking Drawer -->
-  <div class="drawer-overlay" id="drawerOverlay"></div>
-  <aside class="cart-drawer" id="cartDrawer">
-    <div class="drawer-header">
-      <div class="dh-title">
-        <i class="fa-solid fa-bag-shopping"></i>
-        <h3>Your Beauty Cart</h3>
-      </div>
-      <button class="drawer-close-btn" id="closeCartBtn">&times;</button>
-    </div>
-
-    <div class="drawer-body" id="cartItemsList">
-      <!-- Generated via app.js -->
-    </div>
-
-    <div class="drawer-footer" id="cartDrawerFooter">
-      <div class="drawer-subtotal">
-        <span>Subtotal:</span>
-        <strong id="cartSubtotal" class="text-rose">₱0.00</strong>
-      </div>
-      <p class="drawer-note">Orders can be picked up at the lounge or arranged via Grab/Lalamove delivery.</p>
-      <button class="btn btn-gold btn-block" id="btnCartCheckout">
-        <i class="fa-solid fa-check"></i> Proceed to Checkout
-      </button>
-    </div>
-  </aside>
-
-  <!-- Cart Checkout Modal -->
-  <div class="modal" id="checkoutModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3>Boutique Order Checkout</h3>
-          <button class="modal-close-btn" id="closeCheckoutModal">&times;</button>
-        </div>
-        <div class="modal-body">
-          <form id="checkoutForm">
-            <div class="checkout-summary-box" id="checkoutSummaryBox"></div>
-            
-            <div class="form-group">
-              <label for="chkName">Full Name *</label>
-              <input type="text" id="chkName" class="form-control" placeholder="e.g. Anna Marie" required>
-            </div>
-            <div class="form-group">
-              <label for="chkPhone">Contact Number *</label>
-              <input type="tel" id="chkPhone" class="form-control" placeholder="0917 123 4567" required>
-            </div>
-            <div class="form-group">
-              <label for="chkAddress">Delivery Address or Store Pickup *</label>
-              <textarea id="chkAddress" class="form-control" rows="2" placeholder="e.g. Unit 4B, Tower 2, Makati City (or type 'Store Pickup')" required></textarea>
-            </div>
-            <div class="form-group">
-              <label for="chkPayment">Payment Method</label>
-              <select id="chkPayment" class="form-control">
-                <option value="gcash">GCash (Instant QR)</option>
-                <option value="maya">Maya</option>
-                <option value="cod">Cash on Delivery (Metro Manila)</option>
-                <option value="pickup">Pay at Lounge Counter</option>
-              </select>
-            </div>
-            <button type="submit" class="btn btn-gold btn-block btn-lg">
-              <i class="fa-solid fa-bag-shopping"></i> Complete Boutique Order
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer"></div>
 
@@ -809,13 +717,12 @@
       <div class="footer-col brand-col">
         <img src="assets/logo.png" alt="Roselie's Beauty Lounge Logo" class="footer-logo">
         <p class="footer-desc">
-          Premier luxury salon and medical aesthetics sanctuary. Dedicated to transformative skincare, laser artistry, and holistic rejuvenation in Metro Manila.
+          Premier luxury salon and medical aesthetics sanctuary. Dedicated to transformative skincare, laser artistry, and holistic rejuvenation.
         </p>
         <div class="footer-socials">
           <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
           <a href="#"><i class="fa-brands fa-instagram"></i></a>
           <a href="#"><i class="fa-brands fa-tiktok"></i></a>
-          <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
         </div>
       </div>
 
@@ -837,7 +744,7 @@
           <li><a href="#booking">Book Appointment Online</a></li>
           <li><a href="#packages">Signature 5+1 Offers</a></li>
           <li><a href="#calculator">Pamper Bundle Builder</a></li>
-          <li><a href="#store">Curated Skincare Boutique</a></li>
+          <li><a href="#contact">Find Our Lounge Location</a></li>
           <li><a href="#experience">Lounge Standards &amp; Safety</a></li>
           <li><a href="#faq">Frequently Asked Questions</a></li>
         </ul>
@@ -846,7 +753,7 @@
       <div class="footer-col">
         <h4 class="footer-heading">Hours &amp; Contact</h4>
         <div class="footer-contact">
-          <p><i class="fa-solid fa-location-dot"></i> Ground Floor, Commercial Center, Metro Manila, Philippines</p>
+          <p id="footerAddressDisplay"><i class="fa-solid fa-location-dot"></i> Roselie's Beauty Lounge, Commercial Center</p>
           <p><i class="fa-solid fa-phone"></i> +63 917 123 4567 / (02) 8123 4567</p>
           <p><i class="fa-regular fa-clock"></i> Monday – Sunday: 10:00 AM – 8:00 PM</p>
           <div class="footer-pill">

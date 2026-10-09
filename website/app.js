@@ -449,69 +449,10 @@ let SERVICES_DATA = [
   }
 ];
 
-// Curated Skincare Boutique Products
-let PRODUCTS_DATA = [
-  {
-    id: "prod-1",
-    name: "Platinum Gluta-C Glow Capsules (60s)",
-    price: 1250,
-    priceDisplay: "₱1,250.00",
-    tag: "Best Seller",
-    icon: "fa-prescription-bottle-medical",
-    desc: "Authentic Japan-grade 500mg L-Glutathione, Vitamin C, and collagen peptides for continuous systemic radiance."
-  },
-  {
-    id: "prod-2",
-    name: "Luminous Vita-C Brightening Serum (30ml)",
-    price: 680,
-    priceDisplay: "₱680.00",
-    tag: "Clinical",
-    icon: "fa-pump-soap",
-    desc: "Potent 15% Ethyl Ascorbic Acid with ferulic acid to fade dark spots and boost skin luminosity."
-  },
-  {
-    id: "prod-3",
-    name: "Invisible Fluid Sunscreen SPF 50+ PA++++",
-    price: 550,
-    priceDisplay: "₱550.00",
-    tag: "Essential",
-    icon: "fa-sun",
-    desc: "Ultra-lightweight hybrid sunscreen that leaves zero white cast and protects post-laser skin effortlessly."
-  },
-  {
-    id: "prod-4",
-    name: "Bio-Cellulose Hydra Recovery Mask (5 sheets)",
-    price: 480,
-    priceDisplay: "₱480.00",
-    tag: "Spa Grade",
-    icon: "fa-mask-face",
-    desc: "Infused with 5 weights of Hyaluronic Acid and Centella Asiatica for immediate skin soothing and plumping."
-  },
-  {
-    id: "prod-5",
-    name: "Salon Intense Keratin Hair Mask (250g)",
-    price: 650,
-    priceDisplay: "₱650.00",
-    tag: "Hair Studio",
-    icon: "fa-bottle-droplet",
-    desc: "Restores chemically treated and rebonded hair bonds with hydrolyzed silk and argan oil."
-  },
-  {
-    id: "prod-6",
-    name: "Rosehip & Collagen Nourishing Cuticle Oil",
-    price: 280,
-    priceDisplay: "₱280.00",
-    tag: "Nail Care",
-    icon: "fa-hand-sparkles",
-    desc: "Non-greasy dropper oil to hydrate dry cuticles and extend the life of your gel manicures."
-  }
-];
-
 // ==========================================================================
 // 2. STATE MANAGEMENT
 // ==========================================================================
 
-let cart = JSON.parse(localStorage.getItem('rbl_cart') || '[]');
 let customBundle = [];
 let activeCategory = 'all';
 
@@ -531,46 +472,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   } catch (e) {}
 
-  // Sync custom products updated from admin console
-  try {
-    const customProds = localStorage.getItem('rbl_products');
-    if (customProds) {
-      const parsedProds = JSON.parse(customProds);
-      if (Array.isArray(parsedProds) && parsedProds.length > 0) {
-        PRODUCTS_DATA = parsedProds;
-      }
-    }
-  } catch (e) {}
-
-  // Sync custom banner & contact phone
-  try {
-    const ann = localStorage.getItem('rbl_announcement');
-    if (ann) {
-      const promoElem = document.querySelector('.top-announcement-left');
-      if (promoElem) {
-        promoElem.innerHTML = `<span class="badge-promo">PROMO</span> ${ann}`;
-      }
-    }
-    const ph = localStorage.getItem('rbl_phone');
-    if (ph) {
-      document.querySelectorAll('.contact-phone-display').forEach(el => el.textContent = ph);
-    }
-  } catch (e) {}
-
   // Apply CMS Site Content (Hero, About, Pillars, Contact details)
   applySiteContent();
 
   renderServices();
   renderPackages();
-  renderProducts();
   renderReviews();
   renderFaqs();
   renderBuilderItems();
   initBookingEngine();
   initFAQ();
   initNavigation();
-  initCart();
-  updateCartBadge();
   document.getElementById('floatingAdminPill')?.remove();
 });
 
@@ -629,10 +541,7 @@ function renderServices() {
 
       <div class="sc-actions">
         <button class="btn btn-primary" onclick="quickBookService('${s.id}')">
-          <i class="fa-regular fa-calendar-check"></i> Book Now
-        </button>
-        <button class="btn btn-outline" onclick="addToCart('${s.id}', 'service')">
-          <i class="fa-solid fa-plus"></i> Add
+          <i class="fa-regular fa-calendar-check"></i> Book Appointment
         </button>
       </div>
     </div>
@@ -714,35 +623,6 @@ function renderPackages() {
   `).join('');
 }
 
-// ==========================================================================
-// 6. RENDER BOUTIQUE STORE PRODUCTS
-// ==========================================================================
-
-function renderProducts() {
-  const container = document.getElementById('storeGrid');
-  if (!container) return;
-
-  container.innerHTML = PRODUCTS_DATA.map(p => `
-    <div class="product-card">
-      <div class="product-visual">
-        <span class="product-tag">${p.tag || 'Boutique'}</span>
-        <i class="fa-solid ${p.icon || 'fa-pump-soap'} product-icon"></i>
-      </div>
-      <div class="product-content">
-        <div>
-          <h3 class="product-title">${p.name}</h3>
-          <p class="product-desc">${p.desc}</p>
-        </div>
-        <div class="product-meta">
-          <span class="product-price">${p.priceDisplay || ('₱' + Number(p.price || 0).toLocaleString() + '.00')}</span>
-          <button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}', 'product')">
-            <i class="fa-solid fa-cart-plus"></i> Add to Bag
-          </button>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
 
 // ==========================================================================
 // 7. CUSTOM PAMPER BUNDLE BUILDER (CALCULATOR)
@@ -1157,7 +1037,7 @@ function generateIcsFile(bookingCode, serviceName, dateStr, timeStr) {
     `DTEND:${dtFormatted}T113000Z`,
     `SUMMARY:Roselie's Beauty Lounge - ${serviceName}`,
     `DESCRIPTION:Appointment Voucher: ${bookingCode}\\nTreatment: ${serviceName}\\nTime: ${timeStr}`,
-    "LOCATION:Roselie's Beauty Lounge, Metro Manila, Philippines",
+    "LOCATION:Roselie's Beauty Lounge",
     "STATUS:CONFIRMED",
     "END:VEVENT",
     "END:VCALENDAR"
@@ -1170,224 +1050,6 @@ function generateIcsFile(bookingCode, serviceName, dateStr, timeStr) {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-}
-
-// ==========================================================================
-// 9. SHOPPING CART & CHECKOUT
-// ==========================================================================
-
-function initCart() {
-  const openBtn = document.getElementById('openCartBtn');
-  const closeBtn = document.getElementById('closeCartBtn');
-  const overlay = document.getElementById('drawerOverlay');
-  const drawer = document.getElementById('cartDrawer');
-  const checkoutBtn = document.getElementById('btnCartCheckout');
-  const checkoutModal = document.getElementById('checkoutModal');
-  const closeCheckoutBtn = document.getElementById('closeCheckoutModal');
-
-  function openCart() {
-    drawer?.classList.add('active');
-    overlay?.classList.add('active');
-    renderCart();
-  }
-
-  function closeCart() {
-    drawer?.classList.remove('active');
-    overlay?.classList.remove('active');
-  }
-
-  openBtn?.addEventListener('click', openCart);
-  closeBtn?.addEventListener('click', closeCart);
-  overlay?.addEventListener('click', () => {
-    closeCart();
-    checkoutModal?.classList.remove('active');
-  });
-
-  checkoutBtn?.addEventListener('click', () => {
-    if (cart.length === 0) return;
-    closeCart();
-    renderCheckoutSummary();
-    checkoutModal?.classList.add('active');
-  });
-
-  closeCheckoutBtn?.addEventListener('click', () => {
-    checkoutModal?.classList.remove('active');
-  });
-
-  document.getElementById('checkoutForm')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const orderId = 'RBL-ORD-' + Math.floor(10000 + Math.random() * 90000);
-    const name = document.getElementById('chkName').value.trim();
-    const phone = document.getElementById('chkPhone').value.trim();
-    const address = document.getElementById('chkAddress').value.trim();
-    const payment = document.getElementById('chkPayment').value;
-    const paymentLabel = document.getElementById('chkPayment').options[document.getElementById('chkPayment').selectedIndex]?.text || payment;
-
-    let total = 0;
-    const itemsPurchased = cart.map(i => {
-      total += (i.price * i.qty);
-      return { name: i.name, qty: i.qty, price: i.price };
-    });
-    const itemsSummary = cart.map(i => `${i.qty}x ${i.name}`).join(', ');
-
-    // Persist to Admin Orders
-    try {
-      const orderRecord = {
-        id: orderId,
-        customerName: name,
-        phone: phone,
-        address: address,
-        items: itemsPurchased,
-        itemsSummary: itemsSummary,
-        total: total,
-        totalDisplay: `₱${total.toLocaleString()}.00`,
-        paymentMethod: paymentLabel,
-        status: "Processing",
-        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-      };
-      const existingOrders = JSON.parse(localStorage.getItem('rbl_orders') || '[]');
-      existingOrders.push(orderRecord);
-      localStorage.setItem('rbl_orders', JSON.stringify(existingOrders));
-    } catch (err) {
-      console.warn("Storage sync:", err);
-    }
-
-    checkoutModal?.classList.remove('active');
-    cart = [];
-    saveCart();
-    updateCartBadge();
-    showToast(`Order Placed! Order ID: ${orderId}. Thank you, ${name}!`, "success");
-  });
-}
-
-function addToCart(itemId, type) {
-  let item = null;
-  if (type === 'service') {
-    item = SERVICES_DATA.find(s => s.id === itemId);
-  } else {
-    item = PRODUCTS_DATA.find(p => p.id === itemId);
-  }
-
-  if (!item) return;
-
-  const existing = cart.find(c => c.id === item.id);
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      priceDisplay: item.priceDisplay,
-      qty: 1,
-      type: type
-    });
-  }
-
-  saveCart();
-  updateCartBadge();
-  showToast(`Added "${item.name}" to your beauty cart!`, "success");
-}
-
-function updateCartQty(id, delta) {
-  const item = cart.find(c => c.id === id);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) {
-    cart = cart.filter(c => c.id !== id);
-  }
-  saveCart();
-  updateCartBadge();
-  renderCart();
-}
-
-function removeFromCart(id) {
-  cart = cart.filter(c => c.id !== id);
-  saveCart();
-  updateCartBadge();
-  renderCart();
-}
-
-function saveCart() {
-  localStorage.setItem('rbl_cart', JSON.stringify(cart));
-}
-
-function updateCartBadge() {
-  const badge = document.getElementById('cartCount');
-  if (!badge) return;
-  const count = cart.reduce((acc, curr) => acc + curr.qty, 0);
-  badge.textContent = count;
-}
-
-function renderCart() {
-  const list = document.getElementById('cartItemsList');
-  const subtotalElem = document.getElementById('cartSubtotal');
-  const footer = document.getElementById('cartDrawerFooter');
-
-  if (!list) return;
-
-  if (cart.length === 0) {
-    list.innerHTML = `
-      <div class="empty-cart-msg">
-        <i class="fa-solid fa-bag-shopping"></i>
-        <h4>Your cart is empty</h4>
-        <p>Explore our treatments or retail skincare products to pamper yourself.</p>
-      </div>
-    `;
-    subtotalElem.textContent = '₱0.00';
-    if (footer) footer.style.display = 'none';
-    return;
-  }
-
-  if (footer) footer.style.display = 'block';
-
-  let total = 0;
-  list.innerHTML = cart.map(item => {
-    const itemTotal = item.price * item.qty;
-    total += itemTotal;
-    return `
-      <div class="cart-item">
-        <div class="ci-info">
-          <h4>${item.name}</h4>
-          <span class="ci-price">₱${item.price.toLocaleString()} × ${item.qty}</span>
-        </div>
-        <div class="ci-controls">
-          <button class="ci-qty-btn" onclick="updateCartQty('${item.id}', -1)">-</button>
-          <span>${item.qty}</span>
-          <button class="ci-qty-btn" onclick="updateCartQty('${item.id}', 1)">+</button>
-          <button class="ci-remove-btn" onclick="removeFromCart('${item.id}')" title="Delete">
-            <i class="fa-regular fa-trash-can"></i>
-          </button>
-        </div>
-      </div>
-    `;
-  }).join('');
-
-  subtotalElem.textContent = `₱${total.toLocaleString()}.00`;
-}
-
-function renderCheckoutSummary() {
-  const box = document.getElementById('checkoutSummaryBox');
-  if (!box) return;
-
-  let total = 0;
-  const itemsText = cart.map(item => {
-    const lineTotal = item.price * item.qty;
-    total += lineTotal;
-    return `<div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-      <span>${item.qty}x ${item.name}</span>
-      <strong>₱${lineTotal.toLocaleString()}</strong>
-    </div>`;
-  }).join('');
-
-  box.innerHTML = `
-    <h4 style="margin-bottom:8px; font-weight:700;">Order Summary</h4>
-    ${itemsText}
-    <div style="border-top:1px dashed #C8797D; margin-top:10px; padding-top:10px; display:flex; justify-content:space-between; font-size:1.05rem;">
-      <span>Total Payable:</span>
-      <strong style="color:#A85E67;">₱${total.toLocaleString()}.00</strong>
-    </div>
-  `;
 }
 
 // ==========================================================================
@@ -1614,7 +1276,13 @@ function applySiteContent() {
     setTxt('pillar3Desc', c.pillar3Desc);
 
     // Contact
-    setTxt('contactAddressDisplay', c.contactAddress);
+    if (c.contactAddress) {
+      setTxt('contactAddressDisplay', c.contactAddress);
+      const footerAddr = document.getElementById('footerAddressDisplay');
+      if (footerAddr) {
+        footerAddr.innerHTML = `<i class="fa-solid fa-location-dot"></i> ${c.contactAddress}`;
+      }
+    }
     if (c.contactPhone) {
       const pl = document.getElementById('contactPhoneLink');
       if (pl) {

@@ -106,10 +106,6 @@
         <i class="fa-regular fa-calendar-check"></i> Appointments
         <span class="tab-badge amber" id="badgePendingAppointments">0</span>
       </button>
-      <button class="nav-tab-btn" data-tab="orders">
-        <i class="fa-solid fa-bag-shopping"></i> Boutique Orders
-        <span class="tab-badge blue" id="badgeNewOrders">0</span>
-      </button>
       <button class="nav-tab-btn" data-tab="services">
         <i class="fa-solid fa-wand-magic-sparkles"></i> Services &amp; Pricing
       </button>
@@ -172,18 +168,18 @@
           </div>
 
           <div class="kpi-card">
-            <div class="kpi-icon-wrap green">
-              <i class="fa-solid fa-peso-sign"></i>
+            <div class="kpi-icon-wrap gold">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
             </div>
             <div class="kpi-content">
-              <div class="kpi-label">Boutique Sales</div>
-              <div class="kpi-val" id="kpiBoutiqueSales">₱0.00</div>
-              <div class="kpi-sub green"><i class="fa-solid fa-bag-shopping"></i> Online Retail Orders</div>
+              <div class="kpi-label">Active Treatments</div>
+              <div class="kpi-val" id="kpiActiveServices">40+</div>
+              <div class="kpi-sub"><i class="fa-solid fa-spa"></i> Aesthetic &amp; Salon Menu</div>
             </div>
           </div>
 
           <div class="kpi-card">
-            <div class="kpi-icon-wrap gold">
+            <div class="kpi-icon-wrap green">
               <i class="fa-solid fa-envelope-open-text"></i>
             </div>
             <div class="kpi-content">
@@ -220,37 +216,6 @@
                 </tr>
               </thead>
               <tbody id="overviewBookingsBody">
-                <!-- Dynamically Populated -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Recent Boutique Orders Overview -->
-        <div class="table-card">
-          <div class="table-card-header">
-            <div class="table-card-title">
-              <i class="fa-solid fa-bag-shopping text-rose"></i>
-              <span>Recent Boutique Retail Orders</span>
-            </div>
-            <button class="btn-secondary-admin" onclick="switchTab('orders')">
-              View All Orders <i class="fa-solid fa-arrow-right"></i>
-            </button>
-          </div>
-          <div class="table-responsive">
-            <table class="data-table" id="overviewOrdersTable">
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Customer</th>
-                  <th>Items Summary</th>
-                  <th>Total</th>
-                  <th>Payment</th>
-                  <th>Status</th>
-                  <th>Quick Action</th>
-                </tr>
-              </thead>
-              <tbody id="overviewOrdersBody">
                 <!-- Dynamically Populated -->
               </tbody>
             </table>
@@ -314,68 +279,6 @@
                 </tr>
               </thead>
               <tbody id="appointmentsTableBody">
-                <!-- Generated via admin.js -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ====================================================================
-           TAB 3: BOUTIQUE ORDERS MANAGER
-           ==================================================================== -->
-      <section class="tab-pane" id="pane-orders">
-        <div class="page-header">
-          <div class="page-title-group">
-            <h2>Skincare Boutique Orders</h2>
-            <p>Retail sales placed through the website's shopping cart and checkout drawer.</p>
-          </div>
-          <div class="page-header-actions">
-            <button class="btn-secondary-admin" onclick="exportDataToCsv('orders')">
-              <i class="fa-solid fa-file-csv"></i> Export Orders (CSV)
-            </button>
-          </div>
-        </div>
-
-        <div class="table-card">
-          <div class="table-card-header">
-            <div class="table-toolbar">
-              <div class="search-box-wrap">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="orderSearch" class="search-input-admin" placeholder="Search order ID, customer, phone...">
-              </div>
-
-              <select id="orderStatusFilter" class="filter-select">
-                <option value="all">All Order Statuses</option>
-                <option value="Pending">Pending</option>
-                <option value="Processing">Processing</option>
-                <option value="Ready for Pickup">Ready for Pickup / Shipped</option>
-                <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
-              </select>
-            </div>
-            <div>
-              <span id="orderCountDisplay" style="font-size:0.85rem; color:var(--muted-gray); font-weight:600;">0 orders</span>
-            </div>
-          </div>
-
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Order ID</th>
-                  <th>Date</th>
-                  <th>Customer</th>
-                  <th>Contact</th>
-                  <th>Delivery / Pickup</th>
-                  <th>Items Purchased</th>
-                  <th>Total</th>
-                  <th>Payment</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody id="ordersTableBody">
                 <!-- Generated via admin.js -->
               </tbody>
             </table>
@@ -854,7 +757,7 @@
               <div class="form-grid-2">
                 <div class="admin-form-group">
                   <label for="cmsContactAddress">Lounge Physical Address</label>
-                  <input type="text" id="cmsContactAddress" class="admin-form-input" value="Roselie's Beauty Lounge, Ground Floor, Commercial Center, Metro Manila, Philippines">
+                  <input type="text" id="cmsContactAddress" class="admin-form-input" value="Roselie's Beauty Lounge, Commercial Center">
                 </div>
                 <div class="admin-form-group">
                   <label for="cmsContactPhone">Mobile Number (PH)</label>
@@ -1082,63 +985,6 @@
     </div>
   </div>
 
-  <!-- Modal: Order Details -->
-  <div class="modal-backdrop" id="modalOrderDetail">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 id="modTitle">Boutique Order Details</h3>
-        <button class="btn-close-modal" onclick="closeModal('modalOrderDetail')">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="detail-voucher-box">
-          <div class="detail-row">
-            <span>Order Number:</span>
-            <strong id="modCode">RBL-ORD-88214</strong>
-          </div>
-          <div class="detail-row">
-            <span>Customer Name:</span>
-            <strong id="modName">Anna Marie</strong>
-          </div>
-          <div class="detail-row">
-            <span>Contact Phone:</span>
-            <strong id="modPhone">0917 123 4567</strong>
-          </div>
-          <div class="detail-row">
-            <span>Delivery / Pickup:</span>
-            <strong id="modAddress">Unit 4B, Makati City</strong>
-          </div>
-          <div class="detail-row">
-            <span>Payment Mode:</span>
-            <strong id="modPayment">GCash</strong>
-          </div>
-          <div class="detail-row">
-            <span>Order Total:</span>
-            <strong id="modTotal" class="text-rose">₱2,349.00</strong>
-          </div>
-        </div>
-
-        <div class="admin-form-group">
-          <label>Purchased Items:</label>
-          <div id="modItemsList" style="background:#FAF8F8; padding:12px; border-radius:var(--radius-sm); border:1px solid var(--light-border);"></div>
-        </div>
-
-        <div class="admin-form-group">
-          <label for="modStatusSelect">Order Fulfillment Status:</label>
-          <select id="modStatusSelect" class="admin-form-select">
-            <option value="Pending">Pending</option>
-            <option value="Processing">Processing</option>
-            <option value="Ready for Pickup">Ready for Pickup / Shipped</option>
-            <option value="Completed">Completed</option>
-            <option value="Cancelled">Cancelled</option>
-          </select>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-secondary-admin" onclick="closeModal('modalOrderDetail')">Close</button>
-        <button class="btn-primary-admin" id="modSaveStatusBtn">Save Status</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Modal: Edit / Add Service -->
   <div class="modal-backdrop" id="modalServiceForm">

@@ -117,7 +117,7 @@ const SEED_ORDERS = [
     id: "RBL-ORD-88214",
     customerName: "Anna Marie Gomez",
     phone: "0917 888 1234",
-    address: "Unit 4B, Grand Towers, Makati City, Metro Manila",
+    address: "Commercial Center",
     items: [
       { name: "Roselie's Glutathione Glow Capsules", qty: 1, price: 1499 },
       { name: "UV Defense Fluid SPF 50+", qty: 1, price: 850 }
@@ -214,7 +214,7 @@ const DEFAULT_SITE_CONTENT = {
   pillar2Desc: "Directly imported Korean hydro-solutions and Japanese medical gluta drips.",
   pillar3Title: "Empathetic Consultation",
   pillar3Desc: "No rushed appointments. Every treatment is customized to your unique goals.",
-  contactAddress: "Roselie's Beauty Lounge, Ground Floor, Commercial Center, Metro Manila, Philippines",
+  contactAddress: "Roselie's Beauty Lounge, Commercial Center",
   contactPhone: "+63 917 123 4567",
   contactLandline: "(02) 8123 4567",
   contactHours: "Monday to Sunday: 10:00 AM – 8:00 PM (Open on all regular holidays)",
@@ -359,19 +359,30 @@ function refreshAllPanels() {
 
 function updateBadges() {
   const pendingApps = appointments.filter(a => a.status === 'Pending').length;
-  const newOrds = orders.filter(o => o.status === 'Pending' || o.status === 'Processing').length;
   const newMsgs = messages.filter(m => m.status === 'New').length;
 
-  document.getElementById('badgePendingAppointments').textContent = pendingApps;
-  document.getElementById('badgeNewOrders').textContent = newOrds;
-  document.getElementById('badgeNewMessages').textContent = newMsgs;
+  const badgePending = document.getElementById('badgePendingAppointments');
+  if (badgePending) badgePending.textContent = pendingApps;
+  const badgeNewOrds = document.getElementById('badgeNewOrders');
+  if (badgeNewOrds) badgeNewOrds.textContent = 0;
+  const badgeMsgs = document.getElementById('badgeNewMessages');
+  if (badgeMsgs) badgeMsgs.textContent = newMsgs;
 
-  document.getElementById('kpiTotalBookings').textContent = appointments.length;
-  document.getElementById('kpiPendingBookings').textContent = pendingApps;
+  const kpiTotal = document.getElementById('kpiTotalBookings');
+  if (kpiTotal) kpiTotal.textContent = appointments.length;
+  const kpiPending = document.getElementById('kpiPendingBookings');
+  if (kpiPending) kpiPending.textContent = pendingApps;
 
-  const totalRetailSales = orders.reduce((sum, o) => sum + (o.status !== 'Cancelled' ? o.total : 0), 0);
-  document.getElementById('kpiBoutiqueSales').textContent = `₱${totalRetailSales.toLocaleString()}.00`;
-  document.getElementById('kpiTotalMessages').textContent = messages.length;
+  const kpiServices = document.getElementById('kpiActiveServices');
+  if (kpiServices) kpiServices.textContent = (catalog && catalog.length) ? `${catalog.length}+` : '40+';
+
+  const kpiBoutique = document.getElementById('kpiBoutiqueSales');
+  if (kpiBoutique) {
+    const totalRetailSales = orders.reduce((sum, o) => sum + (o.status !== 'Cancelled' ? o.total : 0), 0);
+    kpiBoutique.textContent = `₱${totalRetailSales.toLocaleString()}.00`;
+  }
+  const kpiMsgs = document.getElementById('kpiTotalMessages');
+  if (kpiMsgs) kpiMsgs.textContent = messages.length;
 }
 
 // --- OVERVIEW TAB ---
@@ -381,54 +392,58 @@ function renderOverview() {
 
   // Top 5 Bookings
   const recentBookings = [...appointments].reverse().slice(0, 5);
-  if (recentBookings.length === 0) {
-    tbodyBookings.innerHTML = `<tr><td colspan="8" class="table-empty-state"><p>No appointments recorded yet.</p></td></tr>`;
-  } else {
-    tbodyBookings.innerHTML = recentBookings.map(a => `
-      <tr>
-        <td><strong>${a.id}</strong></td>
-        <td>${a.clientName}</td>
-        <td>${a.phone}</td>
-        <td>${a.service}</td>
-        <td>${a.schedule || a.date}</td>
-        <td><strong class="text-rose">${a.priceDisplay || '₱' + a.price}</strong></td>
-        <td><span class="badge badge-${a.status.toLowerCase()}">${a.status}</span></td>
-        <td>
-          <div class="row-actions">
-            ${a.status === 'Pending' ? `
-              <button class="btn-icon-action approve" onclick="updateAppointmentStatus('${a.id}', 'Confirmed')" title="Approve">
-                <i class="fa-solid fa-check"></i>
+  if (tbodyBookings) {
+    if (recentBookings.length === 0) {
+      tbodyBookings.innerHTML = `<tr><td colspan="8" class="table-empty-state"><p>No appointments recorded yet.</p></td></tr>`;
+    } else {
+      tbodyBookings.innerHTML = recentBookings.map(a => `
+        <tr>
+          <td><strong>${a.id}</strong></td>
+          <td>${a.clientName}</td>
+          <td>${a.phone}</td>
+          <td>${a.service}</td>
+          <td>${a.schedule || a.date}</td>
+          <td><strong class="text-rose">${a.priceDisplay || '₱' + a.price}</strong></td>
+          <td><span class="badge badge-${a.status.toLowerCase()}">${a.status}</span></td>
+          <td>
+            <div class="row-actions">
+              ${a.status === 'Pending' ? `
+                <button class="btn-icon-action approve" onclick="updateAppointmentStatus('${a.id}', 'Confirmed')" title="Approve">
+                  <i class="fa-solid fa-check"></i>
+                </button>
+              ` : ''}
+              <button class="btn-icon-action" onclick="openAppointmentModal('${a.id}')" title="Details">
+                <i class="fa-regular fa-eye"></i>
               </button>
-            ` : ''}
-            <button class="btn-icon-action" onclick="openAppointmentModal('${a.id}')" title="Details">
-              <i class="fa-regular fa-eye"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
-    `).join('');
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
   }
 
-  // Top 5 Orders
-  const recentOrders = [...orders].reverse().slice(0, 5);
-  if (recentOrders.length === 0) {
-    tbodyOrders.innerHTML = `<tr><td colspan="7" class="table-empty-state"><p>No boutique orders recorded yet.</p></td></tr>`;
-  } else {
-    tbodyOrders.innerHTML = recentOrders.map(o => `
-      <tr>
-        <td><strong>${o.id}</strong></td>
-        <td>${o.customerName}</td>
-        <td>${o.itemsSummary || (o.items ? o.items.length + ' items' : '-')}</td>
-        <td><strong class="text-rose">${o.totalDisplay || '₱' + o.total}</strong></td>
-        <td>${o.paymentMethod || 'Cash'}</td>
-        <td><span class="badge badge-${getOrderBadgeClass(o.status)}">${o.status}</span></td>
-        <td>
-          <button class="btn-icon-action" onclick="openOrderModal('${o.id}')" title="View Order">
-            <i class="fa-regular fa-eye"></i>
-          </button>
-        </td>
-      </tr>
-    `).join('');
+  // Top 5 Orders (if table present)
+  if (tbodyOrders) {
+    const recentOrders = [...orders].reverse().slice(0, 5);
+    if (recentOrders.length === 0) {
+      tbodyOrders.innerHTML = `<tr><td colspan="7" class="table-empty-state"><p>No boutique orders recorded yet.</p></td></tr>`;
+    } else {
+      tbodyOrders.innerHTML = recentOrders.map(o => `
+        <tr>
+          <td><strong>${o.id}</strong></td>
+          <td>${o.customerName}</td>
+          <td>${o.itemsSummary || (o.items ? o.items.length + ' items' : '-')}</td>
+          <td><strong class="text-rose">${o.totalDisplay || '₱' + o.total}</strong></td>
+          <td>${o.paymentMethod || 'Cash'}</td>
+          <td><span class="badge badge-${getOrderBadgeClass(o.status)}">${o.status}</span></td>
+          <td>
+            <button class="btn-icon-action" onclick="openOrderModal('${o.id}')" title="View Order">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
   }
 }
 
