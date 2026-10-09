@@ -86,10 +86,22 @@ body {
   text-align: center;
 }
 
+.auth-logo-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 0 auto 18px auto;
+}
+
 .auth-logo {
-  height: 64px;
-  margin-bottom: 16px;
-  filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.3));
+  display: block;
+  margin: 0 auto;
+  height: 72px;
+  max-width: 200px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 14px rgba(212, 175, 55, 0.35));
 }
 
 .auth-title {
