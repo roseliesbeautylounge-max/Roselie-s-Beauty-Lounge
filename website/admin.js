@@ -282,18 +282,44 @@ function loginAdmin(user, pass) {
   const currentPass = localStorage.getItem('rbl_admin_password') || SUPER_ADMIN_DEFAULT_PASS;
   const currentUser = localStorage.getItem('rbl_admin_username') || SUPER_ADMIN_DEFAULT_USER;
 
-  const inputUser = (user || '').trim().toLowerCase();
-  const isMatch = (inputUser === currentUser.toLowerCase() && pass === currentPass) ||
-                  (inputUser === SUPER_ADMIN_DEFAULT_USER.toLowerCase() && pass === SUPER_ADMIN_DEFAULT_PASS);
+  const rawUser = (user || '').trim().toLowerCase();
+  const rawPass = (pass || '').trim();
 
-  if (isMatch) {
+  // Accept username 'admin', 'super admin', 'superadmin', or custom stored username
+  const isUserValid = rawUser === currentUser.toLowerCase() ||
+                      rawUser === SUPER_ADMIN_DEFAULT_USER.toLowerCase() ||
+                      rawUser === 'super admin' ||
+                      rawUser === 'superadmin';
+
+  // Accept password matching stored password or default 'wesleyhans123'
+  const isPassValid = rawPass === currentPass ||
+                      pass === currentPass ||
+                      rawPass === SUPER_ADMIN_DEFAULT_PASS ||
+                      pass === SUPER_ADMIN_DEFAULT_PASS;
+
+  const errorAlert = document.getElementById('authErrorAlert');
+  const errorText = document.getElementById('authErrorText');
+
+  if (isUserValid && isPassValid) {
+    if (errorAlert) errorAlert.style.display = 'none';
     sessionStorage.setItem('rbl_admin_logged', 'true');
     localStorage.setItem('rbl_admin_logged', 'true');
-    document.getElementById('adminAuthOverlay').style.display = 'none';
+
+    const overlay = document.getElementById('adminAuthOverlay');
+    if (overlay) overlay.style.display = 'none';
+
     showAdminToast("Welcome back! Signed in to Roselie's Super Admin Console.", "success");
-    refreshAllPanels();
+    try {
+      refreshAllPanels();
+    } catch (err) {
+      console.warn("Panel refresh error:", err);
+    }
     return true;
   } else {
+    if (errorAlert && errorText) {
+      errorText.textContent = "Invalid credentials. Use Username: admin, Password: wesleyhans123";
+      errorAlert.style.display = 'block';
+    }
     showAdminToast("Invalid username or password.", "danger");
     return false;
   }
@@ -347,14 +373,13 @@ function refreshAllPanels() {
   faqs = getStorage('rbl_faqs', DEFAULT_CMS_FAQS);
   retailProducts = getStorage('rbl_products', DEFAULT_CMS_PRODUCTS);
 
-  updateBadges();
-  renderOverview();
-  renderAppointments();
-  renderOrders();
-  renderServices();
-  renderMessages();
-  renderCmsPanels();
-  populateServiceSelects();
+  try { updateBadges(); } catch (e) { console.warn("updateBadges:", e); }
+  try { renderOverview(); } catch (e) { console.warn("renderOverview:", e); }
+  try { renderAppointments(); } catch (e) { console.warn("renderAppointments:", e); }
+  try { renderServices(); } catch (e) { console.warn("renderServices:", e); }
+  try { renderMessages(); } catch (e) { console.warn("renderMessages:", e); }
+  try { renderCmsPanels(); } catch (e) { console.warn("renderCmsPanels:", e); }
+  try { populateServiceSelects(); } catch (e) { console.warn("populateServiceSelects:", e); }
 }
 
 function updateBadges() {
@@ -520,6 +545,9 @@ function renderAppointments() {
 // --- BOUTIQUE ORDERS TAB ---
 function renderOrders() {
   const tbody = document.getElementById('ordersTableBody');
+  const countDisplay = document.getElementById('orderCountDisplay');
+  if (!tbody || !countDisplay) return;
+
   const search = document.getElementById('orderSearch')?.value.toLowerCase().trim() || '';
   const filter = document.getElementById('orderStatusFilter')?.value || 'all';
 
@@ -537,7 +565,7 @@ function renderOrders() {
     );
   }
 
-  document.getElementById('orderCountDisplay').textContent = `${list.length} orders`;
+  countDisplay.textContent = `${list.length} orders`;
 
   if (list.length === 0) {
     tbody.innerHTML = `
@@ -1473,8 +1501,27 @@ window.deleteCmsProduct = deleteCmsProduct;
 // 13. EVENT LISTENERS INITIALIZATION
 // ==========================================================================
 window.addEventListener('DOMContentLoaded', () => {
-  checkAuth();
-  refreshAllPanels();
+  // 1. Immediately bind login form & submit button
+  const loginForm = document.getElementById('adminLoginForm');
+  const doLogin = (e) => {
+    if (e) e.preventDefault();
+    const user = document.getElementById('adminUsername')?.value || '';
+    const pass = document.getElementById('adminPassword')?.value || '';
+    loginAdmin(user, pass);
+  };
+  loginForm?.addEventListener('submit', doLogin);
+  document.getElementById('btnAdminSignIn')?.addEventListener('click', (e) => {
+    const user = document.getElementById('adminUsername')?.value || '';
+    const pass = document.getElementById('adminPassword')?.value || '';
+    if (user && pass) {
+      e.preventDefault();
+      loginAdmin(user, pass);
+    }
+  });
+
+  // 2. Auth check and initial render
+  try { checkAuth(); } catch (err) { console.warn("checkAuth error:", err); }
+  try { refreshAllPanels(); } catch (err) { console.warn("refreshAllPanels error:", err); }
 
   // Tab buttons
   document.querySelectorAll('.nav-tab-btn').forEach(btn => {
@@ -1490,19 +1537,9 @@ window.addEventListener('DOMContentLoaded', () => {
   // Filters & searches
   document.getElementById('appointmentSearch')?.addEventListener('input', renderAppointments);
   document.getElementById('appointmentStatusFilter')?.addEventListener('change', renderAppointments);
-  document.getElementById('orderSearch')?.addEventListener('input', renderOrders);
-  document.getElementById('orderStatusFilter')?.addEventListener('change', renderOrders);
   document.getElementById('serviceSearch')?.addEventListener('input', renderServices);
   document.getElementById('serviceCategoryFilter')?.addEventListener('change', renderServices);
   document.getElementById('messageSearch')?.addEventListener('input', renderMessages);
-
-  // Login form
-  document.getElementById('adminLoginForm')?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const user = document.getElementById('adminUsername').value.trim();
-    const pass = document.getElementById('adminPassword').value.trim();
-    loginAdmin(user, pass);
-  });
 
   document.getElementById('btnLogoutAdmin')?.addEventListener('click', logoutAdmin);
 
