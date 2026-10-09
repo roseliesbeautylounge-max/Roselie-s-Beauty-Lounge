@@ -176,9 +176,34 @@ function getStorage(key, fallback) {
     const raw = localStorage.getItem(key);
     if (!raw) {
       localStorage.setItem(key, JSON.stringify(fallback));
-      return fallback;
+      return (typeof fallback === 'object' && fallback !== null && !Array.isArray(fallback))
+        ? { ...fallback }
+        : (Array.isArray(fallback) ? [...fallback] : fallback);
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+
+    // Deep merge for settings & CMS objects (e.g. rbl_site_content):
+    // Preserves all user customized entries (location address, phone, socials, custom text)
+    // while seamlessly incorporating any new schema properties added during app updates.
+    if (typeof fallback === 'object' && fallback !== null && !Array.isArray(fallback) &&
+        typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+      return { ...fallback, ...parsed };
+    }
+
+    // Smart merge for treatment catalog (rbl_custom_catalog):
+    // Preserves all user custom pricing, package toggles, and newly created custom treatments,
+    // while seamlessly appending any brand new official treatments added to DEFAULT_SERVICES in updates.
+    if (key === 'rbl_custom_catalog' && Array.isArray(fallback) && Array.isArray(parsed) && parsed.length > 0) {
+      const merged = [...parsed];
+      fallback.forEach(defItem => {
+        if (!merged.some(m => m.id === defItem.id)) {
+          merged.push(defItem);
+        }
+      });
+      return merged;
+    }
+
+    return parsed;
   } catch (e) {
     return fallback;
   }
@@ -380,6 +405,7 @@ function refreshAllPanels() {
   try { renderMessages(); } catch (e) { console.warn("renderMessages:", e); }
   try { renderCmsPanels(); } catch (e) { console.warn("renderCmsPanels:", e); }
   try { populateServiceSelects(); } catch (e) { console.warn("populateServiceSelects:", e); }
+  try { populateSettingsFields(); } catch (e) { console.warn("populateSettingsFields:", e); }
 }
 
 function updateBadges() {
@@ -958,6 +984,7 @@ document.getElementById('serviceEditForm')?.addEventListener('submit', (e) => {
   }
 
   setStorage('rbl_custom_catalog', catalog);
+  saveAutoSnapshot(`Updated catalog item: ${name}`);
   refreshAllPanels();
   closeModal('modalServiceForm');
 });
@@ -967,18 +994,20 @@ function deleteService(serviceId) {
   if (!s) return;
   if (!confirm(`Are you sure you want to remove "${s.name}" from the catalog?`)) return;
 
+  saveAutoSnapshot(`Pre-Delete Treatment: ${s.name}`);
   catalog = catalog.filter(x => x.id !== serviceId);
   setStorage('rbl_custom_catalog', catalog);
   refreshAllPanels();
-  showAdminToast(`Removed "${s.name}" from catalog.`, "warning");
+  showAdminToast(`Removed "${s.name}" from catalog. (Safety snapshot saved)`, "warning");
 }
 
 document.getElementById('btnResetCatalog')?.addEventListener('click', () => {
-  if (!confirm("Reset treatment catalog and pricing back to initial official salon defaults?")) return;
+  if (!confirm("Reset treatment catalog and pricing back to initial official salon defaults?\n(A safety backup snapshot will be saved so you can restore anytime).")) return;
+  saveAutoSnapshot("Pre-Catalog Reset Safety Point");
   catalog = [...DEFAULT_SERVICES];
   setStorage('rbl_custom_catalog', catalog);
   refreshAllPanels();
-  showAdminToast("Catalog reset to official salon catalog defaults.", "success");
+  showAdminToast("Catalog reset to salon defaults. (Safety snapshot saved)", "warning");
 });
 
 // ==========================================================================
@@ -1063,16 +1092,38 @@ function exportDataToCsv(type) {
   showAdminToast(`Exported ${rows.length} ${type} records to CSV!`, "success");
 }
 
-function exportFullJsonBackup() {
-  const fullData = {
+function createSystemSnapshot() {
+  return {
+    version: "2.1.0",
     exportedAt: new Date().toISOString(),
+    snapshotDateFormatted: new Date().toLocaleString(),
     lounge: "Roselie's Beauty Lounge",
-    appointments: appointments,
-    orders: orders,
-    messages: messages,
-    catalog: catalog
+    siteContent: getStorage('rbl_site_content', DEFAULT_SITE_CONTENT),
+    catalog: getStorage('rbl_custom_catalog', DEFAULT_SERVICES),
+    appointments: getStorage('rbl_appointments', SEED_APPOINTMENTS),
+    orders: getStorage('rbl_orders', SEED_ORDERS),
+    messages: getStorage('rbl_messages', SEED_MESSAGES),
+    testimonials: getStorage('rbl_testimonials', DEFAULT_CMS_REVIEWS),
+    faqs: getStorage('rbl_faqs', DEFAULT_CMS_FAQS),
+    retailProducts: getStorage('rbl_products', DEFAULT_CMS_PRODUCTS),
+    announcement: localStorage.getItem('rbl_announcement') || "PROMO: Book any 5 sessions & get your 6th session FREE on all signature laser & gluta treatments!",
+    phone: localStorage.getItem('rbl_phone') || "+63 917 123 4567"
   };
+}
 
+function saveAutoSnapshot(reason = "Auto-save") {
+  try {
+    const snapshot = createSystemSnapshot();
+    snapshot.reason = reason;
+    localStorage.setItem('rbl_auto_snapshot', JSON.stringify(snapshot));
+    localStorage.setItem('rbl_auto_snapshot_time', new Date().toLocaleString());
+  } catch (e) {
+    console.warn("Auto snapshot error:", e);
+  }
+}
+
+function exportFullJsonBackup() {
+  const fullData = createSystemSnapshot();
   const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: 'application/json' });
   const link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
@@ -1080,27 +1131,135 @@ function exportFullJsonBackup() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
 
-  showAdminToast("Full system JSON database backup downloaded!", "success");
+  showAdminToast("Full site backup (.JSON) downloaded! Location, catalog & settings are safely exported.", "success");
+}
+
+function restoreAutoSnapshot() {
+  try {
+    const raw = localStorage.getItem('rbl_auto_snapshot');
+    if (!raw) {
+      showAdminToast("No auto-saved snapshot found in browser storage.", "warning");
+      return;
+    }
+    const data = JSON.parse(raw);
+    const snapTime = localStorage.getItem('rbl_auto_snapshot_time') || data.snapshotDateFormatted || 'recent session';
+    if (!confirm(`Restore all lounge data, custom location & catalog from auto-saved snapshot (${snapTime})?`)) return;
+    applyImportedBackupData(data);
+    showAdminToast(`Successfully restored snapshot from ${snapTime}!`, "success");
+  } catch (err) {
+    showAdminToast("Error restoring snapshot: " + err.message, "danger");
+  }
+}
+
+function handleBackupFileSelect(e) {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    try {
+      const data = JSON.parse(evt.target.result);
+      if (!data || typeof data !== 'object') {
+        throw new Error("The selected file is not a valid JSON backup.");
+      }
+      if (!data.siteContent && !data.catalog && !data.appointments) {
+        throw new Error("File does not contain valid Roselie's Beauty Lounge backup data.");
+      }
+      saveAutoSnapshot("Pre-Restore Safety Point");
+      applyImportedBackupData(data);
+      showAdminToast("Backup file restored successfully! Location, catalog & CMS content are live.", "success");
+    } catch (err) {
+      showAdminToast("Failed to restore backup: " + err.message, "danger");
+    } finally {
+      e.target.value = '';
+    }
+  };
+  reader.readAsText(file);
+}
+
+function applyImportedBackupData(data) {
+  if (data.siteContent && typeof data.siteContent === 'object') {
+    const merged = { ...DEFAULT_SITE_CONTENT, ...data.siteContent };
+    setStorage('rbl_site_content', merged);
+    siteContent = merged;
+  }
+  if (Array.isArray(data.catalog)) {
+    setStorage('rbl_custom_catalog', data.catalog);
+    catalog = data.catalog;
+  }
+  if (Array.isArray(data.appointments)) {
+    setStorage('rbl_appointments', data.appointments);
+    appointments = data.appointments;
+  }
+  if (Array.isArray(data.orders)) {
+    setStorage('rbl_orders', data.orders);
+    orders = data.orders;
+  }
+  if (Array.isArray(data.messages)) {
+    setStorage('rbl_messages', data.messages);
+    messages = data.messages;
+  }
+  if (Array.isArray(data.testimonials)) {
+    setStorage('rbl_testimonials', data.testimonials);
+    testimonials = data.testimonials;
+  }
+  if (Array.isArray(data.faqs)) {
+    setStorage('rbl_faqs', data.faqs);
+    faqs = data.faqs;
+  }
+  if (Array.isArray(data.retailProducts)) {
+    setStorage('rbl_products', data.retailProducts);
+    retailProducts = data.retailProducts;
+  }
+  if (data.announcement) {
+    localStorage.setItem('rbl_announcement', data.announcement);
+    const annInput = document.getElementById('announcementInput');
+    if (annInput) annInput.value = data.announcement;
+  }
+  if (data.phone) {
+    localStorage.setItem('rbl_phone', data.phone);
+    const phInput = document.getElementById('phoneInput');
+    if (phInput) phInput.value = data.phone;
+  }
+
+  // Refresh all UI panels and fields immediately
+  refreshAllPanels();
+  populateCmsFields();
+  populateSettingsFields();
+}
+
+function populateSettingsFields() {
+  const savedAnn = localStorage.getItem('rbl_announcement');
+  if (savedAnn) {
+    const el = document.getElementById('announcementInput');
+    if (el) el.value = savedAnn;
+  }
+  const savedPhone = localStorage.getItem('rbl_phone') || siteContent?.contactPhone;
+  if (savedPhone) {
+    const el = document.getElementById('phoneInput');
+    if (el) el.value = savedPhone;
+  }
 }
 
 document.getElementById('btnLoadDemoData')?.addEventListener('click', () => {
+  if (!confirm("Load realistic demo appointments, inquiries, and orders?\n(A safety backup snapshot of your current data will be saved).")) return;
+  saveAutoSnapshot("Pre-Demo Data Load");
   appointments = [...SEED_APPOINTMENTS];
   orders = [...SEED_ORDERS];
   messages = [...SEED_MESSAGES];
-  catalog = [...DEFAULT_SERVICES];
-
+  // Do NOT wipe custom catalog or location!
   setStorage('rbl_appointments', appointments);
   setStorage('rbl_orders', orders);
   setStorage('rbl_messages', messages);
-  setStorage('rbl_custom_catalog', catalog);
 
   refreshAllPanels();
-  showAdminToast("Realistic demo data loaded into all tabs!", "success");
+  showAdminToast("Realistic demo records loaded into appointments & messages! (Custom catalog preserved)", "success");
 });
 
 document.getElementById('btnClearAllData')?.addEventListener('click', () => {
-  if (!confirm("Are you sure? This will remove all local bookings, orders, and inquiries from your browser storage.")) return;
+  if (!confirm("Are you sure? This will remove all local bookings, orders, and inquiries from your browser storage.\n(A safety backup snapshot will be saved so you can restore anytime).")) return;
+  saveAutoSnapshot("Pre-Clear Records");
   appointments = [];
   orders = [];
   messages = [];
@@ -1108,7 +1267,7 @@ document.getElementById('btnClearAllData')?.addEventListener('click', () => {
   setStorage('rbl_orders', orders);
   setStorage('rbl_messages', messages);
   refreshAllPanels();
-  showAdminToast("Database records cleared.", "warning");
+  showAdminToast("Database records cleared. (Safety snapshot saved)", "warning");
 });
 
 document.getElementById('announcementForm')?.addEventListener('submit', (e) => {
@@ -1117,6 +1276,7 @@ document.getElementById('announcementForm')?.addEventListener('submit', (e) => {
   const phone = document.getElementById('phoneInput').value.trim();
   localStorage.setItem('rbl_announcement', text);
   localStorage.setItem('rbl_phone', phone);
+  saveAutoSnapshot("Updated announcement banner");
   showAdminToast("Website banner & contact saved! Refresh public site to see changes.", "success");
 });
 
@@ -1422,6 +1582,7 @@ function saveCmsHeroForm() {
   siteContent.feat3Sub = getVal('cmsFeat3Sub', siteContent.feat3Sub);
 
   setStorage('rbl_site_content', siteContent);
+  saveAutoSnapshot("CMS Update: Hero Section");
   showAdminToast("Hero section & badges saved! Live on website.", "success");
 }
 
@@ -1441,6 +1602,7 @@ function saveCmsAboutForm() {
   siteContent.pillar3Desc = getVal('cmsPillar3Desc', siteContent.pillar3Desc);
 
   setStorage('rbl_site_content', siteContent);
+  saveAutoSnapshot("CMS Update: About Story & Pillars");
   showAdminToast("About story & clinical pillars saved!", "success");
 }
 
@@ -1460,6 +1622,7 @@ function saveCmsContactForm() {
   localStorage.setItem('rbl_phone', siteContent.contactPhone);
 
   setStorage('rbl_site_content', siteContent);
+  saveAutoSnapshot(`CMS Update: Contact & Location (${siteContent.contactAddress})`);
   showAdminToast("Contact details & social links saved!", "success");
 }
 
@@ -1467,11 +1630,13 @@ function saveAllCms() {
   saveCmsHeroForm();
   saveCmsAboutForm();
   saveCmsContactForm();
+  saveAutoSnapshot("CMS Update: Full Site Copy & Location");
   showAdminToast("All website content sections saved & synced live!", "success");
 }
 
 function resetCmsDefaults() {
-  if (!confirm("Are you sure you want to reset all website copy, testimonials, FAQs, and retail products to official lounge defaults?")) return;
+  if (!confirm("Are you sure you want to reset all website copy, testimonials, FAQs, and retail products to official lounge defaults?\n(A safety backup snapshot will be saved so you can restore anytime).")) return;
+  saveAutoSnapshot("Pre-CMS Reset Safety Point");
   siteContent = { ...DEFAULT_SITE_CONTENT };
   testimonials = [ ...DEFAULT_CMS_REVIEWS ];
   faqs = [ ...DEFAULT_CMS_FAQS ];
@@ -1486,7 +1651,7 @@ function resetCmsDefaults() {
   renderCmsReviews();
   renderCmsFaqs();
   renderCmsProducts();
-  showAdminToast("All website content restored to defaults!", "warning");
+  showAdminToast("All website content restored to defaults! (Safety snapshot saved)", "warning");
 }
 
 // Make functions globally accessible for inline onclick attributes
@@ -1496,6 +1661,9 @@ window.openEditCmsFaq = openEditCmsFaq;
 window.deleteCmsFaq = deleteCmsFaq;
 window.openEditCmsProduct = openEditCmsProduct;
 window.deleteCmsProduct = deleteCmsProduct;
+window.exportFullJsonBackup = exportFullJsonBackup;
+window.restoreAutoSnapshot = restoreAutoSnapshot;
+window.handleBackupFileSelect = handleBackupFileSelect;
 
 // ==========================================================================
 // 13. EVENT LISTENERS INITIALIZATION
@@ -1574,6 +1742,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('btnSaveCmsAll')?.addEventListener('click', saveAllCms);
   document.getElementById('btnResetCmsDefaults')?.addEventListener('click', resetCmsDefaults);
+
+  // Data Protection, JSON Backup & Restore
+  const backupFileInput = document.getElementById('importJsonFileInput');
+  if (backupFileInput) {
+    backupFileInput.addEventListener('change', handleBackupFileSelect);
+  }
+  document.getElementById('btnTriggerRestoreBackup')?.addEventListener('click', () => {
+    backupFileInput?.click();
+  });
+  document.getElementById('btnRestoreAutoSnapshot')?.addEventListener('click', () => {
+    restoreAutoSnapshot();
+  });
 
   // CMS Reviews CRUD
   document.getElementById('btnAddCmsReview')?.addEventListener('click', () => {

@@ -305,7 +305,10 @@
             <button class="btn-primary-admin" id="btnAddNewService">
               <i class="fa-solid fa-plus"></i> Add New Treatment
             </button>
-            <button class="btn-secondary-admin" id="btnResetCatalog">
+            <button class="btn-secondary-admin" onclick="exportFullJsonBackup()" title="Download JSON backup of all treatments and site settings">
+              <i class="fa-solid fa-download"></i> Backup Catalog
+            </button>
+            <button class="btn-secondary-admin" id="btnResetCatalog" style="color:#C84D58;">
               <i class="fa-solid fa-rotate-left"></i> Reset to Default
             </button>
           </div>
@@ -454,10 +457,34 @@
             </form>
           </div>
 
+          <!-- Persistent Data Backup & Update Protection -->
+          <div class="settings-card" style="border: 1px solid rgba(212, 175, 55, 0.45); background: linear-gradient(135deg, #FFFDF9 0%, #FAF6EE 100%);">
+            <h3><i class="fa-solid fa-shield-halved text-rose"></i> Site Data Protection &amp; Backup (.JSON)</h3>
+            <p>Export or restore all custom location details, catalog pricing, appointments, and CMS content. Keeps your settings 100% safe across updates and redeployments.</p>
+            <div class="export-btn-group">
+              <button class="btn-export" onclick="exportFullJsonBackup()" style="background:#fff; font-weight:600;">
+                <span><i class="fa-solid fa-download text-rose"></i> Download Full Site Backup (.JSON)</span>
+                <i class="fa-solid fa-file-arrow-down"></i>
+              </button>
+              <button class="btn-export" id="btnTriggerRestoreBackup" style="background:#fff; font-weight:600;">
+                <span><i class="fa-solid fa-upload text-rose"></i> Restore / Import Backup File (.JSON)</span>
+                <i class="fa-solid fa-file-arrow-up"></i>
+              </button>
+              <input type="file" id="importJsonFileInput" accept=".json" style="display:none;">
+              <button class="btn-export" id="btnRestoreAutoSnapshot" style="background:#fff;">
+                <span><i class="fa-solid fa-clock-rotate-left text-rose"></i> Restore Last Saved Snapshot</span>
+                <i class="fa-solid fa-rotate-left"></i>
+              </button>
+            </div>
+            <div style="margin-top:0.75rem; font-size:0.82rem; color:var(--text-secondary); line-height:1.45;">
+              <i class="fa-solid fa-circle-check" style="color:var(--emerald);"></i> <strong>Resilient Auto-Merge Active:</strong> Your custom lounge location, contact details, and custom treatments are automatically protected against being overwritten whenever new features or code updates are deployed.
+            </div>
+          </div>
+
           <!-- Data Backup & CSV Export -->
           <div class="settings-card">
-            <h3><i class="fa-solid fa-file-export text-rose"></i> Export Records &amp; POS Bridge</h3>
-            <p>Download clean CSV spreadsheets compatible with Microsoft Excel, Google Sheets, or your POS accounting.</p>
+            <h3><i class="fa-solid fa-file-export text-rose"></i> Export Records (CSV Spreadsheets)</h3>
+            <p>Download clean CSV spreadsheets compatible with Microsoft Excel, Google Sheets, or POS accounting.</p>
             <div class="export-btn-group">
               <button class="btn-export" onclick="exportDataToCsv('appointments')">
                 <span><i class="fa-solid fa-calendar-check text-rose"></i> Export Appointments (CSV)</span>
@@ -465,10 +492,6 @@
               </button>
               <button class="btn-export" onclick="exportDataToCsv('orders')">
                 <span><i class="fa-solid fa-bag-shopping text-rose"></i> Export Boutique Orders (CSV)</span>
-                <i class="fa-solid fa-download"></i>
-              </button>
-              <button class="btn-export" onclick="exportFullJsonBackup()">
-                <span><i class="fa-solid fa-database text-rose"></i> Full System Backup (.JSON)</span>
                 <i class="fa-solid fa-download"></i>
               </button>
             </div>
@@ -505,7 +528,13 @@
             <button class="btn-primary-admin" id="btnSaveCmsAll">
               <i class="fa-solid fa-floppy-disk"></i> Save All Content
             </button>
-            <button class="btn-secondary-admin" id="btnResetCmsDefaults">
+            <button class="btn-secondary-admin" onclick="exportFullJsonBackup()" title="Download full JSON backup of settings & content">
+              <i class="fa-solid fa-download"></i> Backup Site Data (.JSON)
+            </button>
+            <button class="btn-secondary-admin" onclick="document.getElementById('importJsonFileInput')?.click()" title="Restore settings from a previously saved JSON file">
+              <i class="fa-solid fa-upload"></i> Restore Backup
+            </button>
+            <button class="btn-secondary-admin" id="btnResetCmsDefaults" style="color:#C84D58;">
               <i class="fa-solid fa-rotate-left"></i> Restore Defaults
             </button>
           </div>

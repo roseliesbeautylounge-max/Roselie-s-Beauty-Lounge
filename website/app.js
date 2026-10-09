@@ -461,16 +461,24 @@ let activeCategory = 'all';
 // ==========================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Sync custom catalog updated from admin console
+  // Sync custom catalog updated from admin console (with smart merge to preserve custom edits & accommodate updates)
   try {
     const customCat = localStorage.getItem('rbl_custom_catalog');
     if (customCat) {
       const parsed = JSON.parse(customCat);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        SERVICES_DATA = parsed;
+        const mergedCatalog = [...parsed];
+        SERVICES_DATA.forEach(defSrv => {
+          if (!mergedCatalog.some(s => s.id === defSrv.id)) {
+            mergedCatalog.push(defSrv);
+          }
+        });
+        SERVICES_DATA = mergedCatalog;
       }
     }
-  } catch (e) {}
+  } catch (e) {
+    console.warn("Catalog sync error:", e);
+  }
 
   // Apply CMS Site Content (Hero, About, Pillars, Contact details)
   applySiteContent();
@@ -1026,6 +1034,15 @@ function quickBookPackage(serviceId) {
 function generateIcsFile(bookingCode, serviceName, dateStr, timeStr) {
   const dtParts = dateStr.split('-');
   const dtFormatted = `${dtParts[0]}${dtParts[1]}${dtParts[2]}`;
+  let locationAddress = "Roselie's Beauty Lounge, Commercial Center";
+  try {
+    const raw = localStorage.getItem('rbl_site_content');
+    if (raw) {
+      const p = JSON.parse(raw);
+      if (p.contactAddress) locationAddress = p.contactAddress;
+    }
+  } catch (e) {}
+
   const icsData = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
@@ -1037,7 +1054,7 @@ function generateIcsFile(bookingCode, serviceName, dateStr, timeStr) {
     `DTEND:${dtFormatted}T113000Z`,
     `SUMMARY:Roselie's Beauty Lounge - ${serviceName}`,
     `DESCRIPTION:Appointment Voucher: ${bookingCode}\\nTreatment: ${serviceName}\\nTime: ${timeStr}`,
-    "LOCATION:Roselie's Beauty Lounge",
+    `LOCATION:${locationAddress}`,
     "STATUS:CONFIRMED",
     "END:VEVENT",
     "END:VCALENDAR"
@@ -1226,11 +1243,57 @@ const DEFAULT_FAQS = [
   }
 ];
 
+const DEFAULT_SITE_CONTENT = {
+  heroTag: "✦ Luxury Aesthetics & Beauty Lounge ✦",
+  heroTitle: "Where Elegance Meets <br><span class=\"text-gradient-gold\">Aesthetic Perfection</span>",
+  heroDesc: "Step into a sanctuary of transformative wellness. Experience medical-grade gluta drips, pain-free diode lasers, advanced hydro-facials, and couture salon treatments tailored to unveil your luminous best.",
+  heroRatingVal: "5.0 / 5.0 Rating",
+  heroRatingSub: "Over 1,200+ Radiant Clients",
+  heroPromoBadgeTitle: "Signature 5+1 Sessions",
+  heroPromoBadgeSub: "Buy 5 Get 1 Complimentary",
+  feat1Title: "Certified Specialists",
+  feat1Sub: "Board-trained aestheticians",
+  feat2Title: "Medical Grade Tech",
+  feat2Sub: "Diode Ice & Pico Lasers",
+  feat3Title: "100% Authentic Drips",
+  feat3Sub: "Japan & Korea Formulated",
+  aboutSubtitle: "The Sanctuary Experience",
+  aboutTitle: "Luxury Aesthetics Rooted in Care & Science",
+  aboutYears: "5+",
+  aboutYearsText: "Years of Aesthetic Excellence",
+  aboutPara1: "Founded with a passion for transformative beauty, Roselie's Beauty Lounge provides an elevated salon and clinical aesthetics escape where relaxation and visible results coexist seamlessly.",
+  aboutPara2: "From the moment you step through our doors, our dedicated team of licensed aestheticians and master stylists caters to your every comfort in private, meticulously sterilized suites designed for deep rejuvenation.",
+  pillar1Title: "Hospital-Grade Hygiene",
+  pillar1Desc: "Autoclaved instruments and single-use consumables for every client.",
+  pillar2Title: "Authentic Formulations",
+  pillar2Desc: "Directly imported Korean hydro-solutions and Japanese medical gluta drips.",
+  pillar3Title: "Empathetic Consultation",
+  pillar3Desc: "No rushed appointments. Every treatment is customized to your unique goals.",
+  contactAddress: "Roselie's Beauty Lounge, Commercial Center",
+  contactPhone: "+63 917 123 4567",
+  contactLandline: "(02) 8123 4567",
+  contactHours: "Monday to Sunday: 10:00 AM – 8:00 PM (Open on all regular holidays)",
+  contactEmail: "concierge@roseliesbeautylounge.com",
+  socialFb: "https://facebook.com",
+  socialIg: "https://instagram.com",
+  socialTiktok: "https://tiktok.com",
+  socialWa: "https://wa.me/639171234567"
+};
+
 function applySiteContent() {
   try {
+    let saved = {};
     const raw = localStorage.getItem('rbl_site_content');
-    if (!raw) return;
-    const c = JSON.parse(raw);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') saved = parsed;
+      } catch (e) {}
+    }
+
+    // Resilient deep merge: user's customized location and texts ALWAYS take precedence over defaults,
+    // while any newly introduced fields from app updates are seamlessly populated.
+    const c = Object.assign({}, DEFAULT_SITE_CONTENT, saved);
 
     const setTxt = (id, val) => {
       const el = document.getElementById(id);
@@ -1275,7 +1338,7 @@ function applySiteContent() {
     setTxt('pillar3Title', c.pillar3Title);
     setTxt('pillar3Desc', c.pillar3Desc);
 
-    // Contact
+    // Contact & Location
     if (c.contactAddress) {
       setTxt('contactAddressDisplay', c.contactAddress);
       const footerAddr = document.getElementById('footerAddressDisplay');
@@ -1319,6 +1382,23 @@ function applySiteContent() {
     if (c.socialIg) document.getElementById('socialIgLink')?.setAttribute('href', c.socialIg);
     if (c.socialTiktok) document.getElementById('socialTiktokLink')?.setAttribute('href', c.socialTiktok);
     if (c.socialWa) document.getElementById('socialWaLink')?.setAttribute('href', c.socialWa);
+
+    // Top Announcement Banner & Phone Sync
+    const savedAnn = localStorage.getItem('rbl_announcement');
+    if (savedAnn) {
+      const topAnnEl = document.getElementById('topAnnouncementText');
+      if (topAnnEl) {
+        topAnnEl.innerHTML = `<span class="badge-gold">PROMO</span> ${savedAnn}`;
+      }
+    }
+    const savedPhone = localStorage.getItem('rbl_phone') || c.contactPhone;
+    if (savedPhone) {
+      const topPhoneEl = document.getElementById('topAnnouncementPhone');
+      if (topPhoneEl) {
+        topPhoneEl.innerHTML = `<i class="fa-solid fa-phone"></i> ${savedPhone}`;
+        topPhoneEl.href = `tel:${savedPhone.replace(/[^0-9+]/g, '')}`;
+      }
+    }
   } catch (err) {
     console.warn("Error applying site content:", err);
   }
