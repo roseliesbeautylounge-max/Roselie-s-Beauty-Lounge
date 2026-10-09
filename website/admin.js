@@ -275,17 +275,26 @@ function checkAuth() {
   }
 }
 
+const SUPER_ADMIN_DEFAULT_USER = 'admin';
+const SUPER_ADMIN_DEFAULT_PASS = 'wesleyhans123';
+
 function loginAdmin(user, pass) {
-  // Allow admin / admin123 or PIN 1234
-  if ((user === 'admin' && pass === 'admin123') || pass === '1234') {
+  const currentPass = localStorage.getItem('rbl_admin_password') || SUPER_ADMIN_DEFAULT_PASS;
+  const currentUser = localStorage.getItem('rbl_admin_username') || SUPER_ADMIN_DEFAULT_USER;
+
+  const inputUser = (user || '').trim().toLowerCase();
+  const isMatch = (inputUser === currentUser.toLowerCase() && pass === currentPass) ||
+                  (inputUser === SUPER_ADMIN_DEFAULT_USER.toLowerCase() && pass === SUPER_ADMIN_DEFAULT_PASS);
+
+  if (isMatch) {
     sessionStorage.setItem('rbl_admin_logged', 'true');
     localStorage.setItem('rbl_admin_logged', 'true');
     document.getElementById('adminAuthOverlay').style.display = 'none';
-    showAdminToast("Welcome back! Signed in to Roselie's Admin Console.", "success");
+    showAdminToast("Welcome back! Signed in to Roselie's Super Admin Console.", "success");
     refreshAllPanels();
     return true;
   } else {
-    showAdminToast("Invalid username or password. Use: admin / admin123", "danger");
+    showAdminToast("Invalid username or password.", "danger");
     return false;
   }
 }
@@ -1480,11 +1489,20 @@ window.addEventListener('DOMContentLoaded', () => {
     loginAdmin(user, pass);
   });
 
-  document.getElementById('btnQuickDemoLogin')?.addEventListener('click', () => {
-    loginAdmin('admin', 'admin123');
-  });
-
   document.getElementById('btnLogoutAdmin')?.addEventListener('click', logoutAdmin);
+
+  // Super Admin Security Form (Password Change)
+  document.getElementById('adminSecurityForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const newPass = document.getElementById('secAdminPassword').value.trim();
+    if (!newPass || newPass.length < 6) {
+      showAdminToast("Password must be at least 6 characters.", "warning");
+      return;
+    }
+    localStorage.setItem('rbl_admin_password', newPass);
+    document.getElementById('secAdminPassword').value = '';
+    showAdminToast("Super Admin master password updated successfully!", "success");
+  });
 
   // CMS Forms and Buttons
   document.getElementById('cmsHeroForm')?.addEventListener('submit', (e) => {

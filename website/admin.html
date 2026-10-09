@@ -26,7 +26,7 @@
   <div class="auth-overlay" id="adminAuthOverlay">
     <div class="auth-card">
       <img src="assets/logo.png" alt="Roselie's Beauty Lounge Logo" class="auth-logo">
-      <h2 class="auth-title">Staff Admin Console</h2>
+      <h2 class="auth-title">Super Admin Portal</h2>
       <p class="auth-subtitle">Roselie's Beauty Lounge Management</p>
 
       <form id="adminLoginForm" class="auth-form">
@@ -34,15 +34,15 @@
           <label for="adminUsername">Admin Username</label>
           <div class="auth-input-wrap">
             <i class="fa-solid fa-user-shield"></i>
-            <input type="text" id="adminUsername" class="auth-input" value="admin" required placeholder="admin">
+            <input type="text" id="adminUsername" class="auth-input" required placeholder="Enter username" autocomplete="username">
           </div>
         </div>
 
         <div class="form-group">
-          <label for="adminPassword">Security Password / PIN</label>
+          <label for="adminPassword">Security Password</label>
           <div class="auth-input-wrap">
             <i class="fa-solid fa-lock"></i>
-            <input type="password" id="adminPassword" class="auth-input" value="admin123" required placeholder="admin123 or 1234">
+            <input type="password" id="adminPassword" class="auth-input" required placeholder="Enter password" autocomplete="current-password">
           </div>
         </div>
 
@@ -50,13 +50,6 @@
           <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In to Portal
         </button>
       </form>
-
-      <div class="demo-creds-box">
-        <div>Default Credentials: <code>admin</code> / <code>admin123</code> (or PIN <code>1234</code>)</div>
-        <button type="button" class="auth-quick-fill" id="btnQuickDemoLogin">
-          <i class="fa-solid fa-bolt"></i> 1-Click Quick Sign In
-        </button>
-      </div>
 
       <a href="index.html" class="auth-back-link">
         <i class="fa-solid fa-arrow-left"></i> Return to Public Website
@@ -92,10 +85,10 @@
         </a>
 
         <div class="admin-user-profile">
-          <div class="user-avatar">AD</div>
+          <div class="user-avatar">SA</div>
           <div class="user-meta">
-            <span class="user-name">Administrator</span>
-            <span class="user-role">Lounge Manager</span>
+            <span class="user-name">Super Admin</span>
+            <span class="user-role">Master Controller</span>
           </div>
           <button class="btn-logout" id="btnLogoutAdmin" title="Sign Out">
             <i class="fa-solid fa-power-off"></i> Exit
@@ -514,6 +507,25 @@
         </div>
 
         <div class="settings-grid">
+          <!-- Super Admin Security Credentials -->
+          <div class="settings-card">
+            <h3><i class="fa-solid fa-user-shield text-rose"></i> Super Admin Account Security</h3>
+            <p>Master account credentials for this Management Console.</p>
+            <form id="adminSecurityForm">
+              <div class="admin-form-group">
+                <label for="secAdminUsername">Admin Username</label>
+                <input type="text" id="secAdminUsername" class="admin-form-input" value="admin" readonly style="background:var(--warm-cream); cursor:not-allowed;">
+              </div>
+              <div class="admin-form-group">
+                <label for="secAdminPassword">Change Master Password</label>
+                <input type="password" id="secAdminPassword" class="admin-form-input" placeholder="Enter new password (min. 6 chars)">
+              </div>
+              <button type="submit" class="btn-primary-admin">
+                <i class="fa-solid fa-key"></i> Update Master Password
+              </button>
+            </form>
+          </div>
+
           <!-- Announcement & Contact Settings -->
           <div class="settings-card">
             <h3><i class="fa-solid fa-bullhorn text-rose"></i> Public Announcement Banner</h3>
